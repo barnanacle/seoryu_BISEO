@@ -1,0 +1,13 @@
+# ─── 설치 스크립트가 각 PC에서 생성하는 산출물 (레포에 올리지 않음) ───
+# venv·rhwp 는 setup 스크립트가 사용자 PC에서 새로 설치한다.
+# 이걸 커밋하면 GitHub Desktop 에 수천 개 변경이 떠서 초보 사용자를 혼란시킨다.
+2_도구/venv/
+2_도구/rhwp/
+2_도구/.rhwp_download.tar.gz
+
+# 파이썬 부산물
+__pycache__/
+*.pyc
+
+# macOS 부산물
+.DS_Store
