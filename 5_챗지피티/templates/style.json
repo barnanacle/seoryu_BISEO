@@ -1,0 +1,73 @@
+{
+  "만든방법": "style_pick.py (SHA-256 정본 방식)",
+  "씨앗": "최수빈수빈행정사행정사01033333333차분",
+  "변형": 1,
+  "해시앞12자리": "09f0aa03ebdf",
+  "계산조각": [
+    9,
+    240,
+    170,
+    3,
+    235,
+    223
+  ],
+  "축": {
+    "색조합": {
+      "번호": 1,
+      "키": "jjokbit",
+      "이름": "쪽빛"
+    },
+    "배치": {
+      "번호": 0,
+      "키": "a",
+      "이름": "세로 카드"
+    },
+    "글자조합": {
+      "번호": 2,
+      "키": "bold",
+      "이름": "굵은 제목 + 좁은 본문"
+    },
+    "장식모티프": {
+      "번호": 3,
+      "키": "grid",
+      "이름": "옅은 격자"
+    },
+    "모서리여백": {
+      "번호": 1,
+      "키": "round",
+      "이름": "라운드 넉넉"
+    },
+    "강조강도": {
+      "번호": 1,
+      "키": "mid",
+      "이름": "보통"
+    }
+  },
+  "body속성": "data-palette=\"jjokbit\" data-layout=\"a\" data-type=\"bold\" data-motif=\"grid\" data-shape=\"round\" data-strength=\"mid\"",
+  "css": {
+    "라이트": {
+      "--bg": "#F4F6FA",
+      "--surface": "#FFFFFF",
+      "--fg": "#16203A",
+      "--muted": "#5E6A85",
+      "--accent": "#23407A",
+      "--accent-soft": "#DCE4F3",
+      "--line": "#D2DAE8"
+    },
+    "다크": {
+      "--bg": "#0F1420",
+      "--surface": "#171E2E",
+      "--fg": "#E8ECF6",
+      "--muted": "#98A3BC",
+      "--accent": "#7CA0E8",
+      "--accent-soft": "#1D2740",
+      "--line": "#2A3348"
+    },
+    "공통": {
+      "--font-head": "-apple-system, BlinkMacSystemFont, \"Apple SD Gothic Neo\", \"Malgun Gothic\", \"맑은 고딕\", sans-serif",
+      "--font-body": "-apple-system, BlinkMacSystemFont, \"Apple SD Gothic Neo\", \"Malgun Gothic\", \"맑은 고딕\", sans-serif",
+      "--radius": "18px",
+      "--pad": "32px"
+    }
+  }
+}
