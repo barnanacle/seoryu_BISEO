@@ -26,7 +26,7 @@
 
 이 문서를 이미 내 PC의 `install_JAARVIS` 폴더에서 열어 보고 있다면, 이 단계는 끝난 것입니다 — ①로 넘어가세요.
 
-아직 꾸러미를 받지 않았다면 `README.md`의 **[0] 꾸러미 받기**를 따라 하세요. 요약하면: GitHub 계정 만들기 → 협회 초대 메일의 **View invitation → Accept** → **GitHub Desktop** 설치·로그인 → **Clone Repository** 목록에서 `install_JAARVIS` 선택 → 클론(내려받기).
+아직 꾸러미를 받지 않았다면 `README.md`의 **[0] 꾸러미 받기**를 따라 하세요. 요약하면: `https://github.com/barnanacle/install_JAARVIS` 를 열고 초록색 **Code → Download ZIP** → 압축 해제. (공개 저장소라 계정도 로그인도 필요 없습니다. 개선판을 클릭 한 번으로 받고 싶으면 GitHub Desktop으로 클론해 두셔도 됩니다.)
 
 **이렇게 되면 성공:** 파일 탐색기에서 `문서\GitHub\install_JAARVIS` 폴더가 열리고, 그 안에 `0_설치` 폴더가 보입니다.
 

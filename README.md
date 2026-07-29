@@ -32,15 +32,16 @@
 
 ### [0] 꾸러미 받기 (GitHub Desktop으로 클론)
 
-이 꾸러미는 협회의 비공개 저장소(`github.com/barnanacle/install_JAARVIS`)에서 받습니다. *클론(clone): 인터넷 저장소의 내용을 내 컴퓨터로 통째로 내려받는 일.* 이 폴더가 이미 내 컴퓨터에 있다면(누가 대신 받아 줬다면) [1]로 건너뛰세요.
+이 꾸러미는 **공개 저장소**(`github.com/barnanacle/install_JAARVIS`)에서 받습니다. 로그인도, 초대도 필요 없습니다. *클론(clone): 인터넷 저장소의 내용을 내 컴퓨터로 통째로 내려받는 일.* 이 폴더가 이미 내 컴퓨터에 있다면(누가 대신 받아 줬다면) [1]로 건너뛰세요.
 
-1. **GitHub 계정 만들기** — 브라우저에서 `https://github.com` 접속 → **Sign up** 클릭 → 이메일·비밀번호·아이디 입력 → 이메일로 온 인증 코드를 입력하면 가입 완료.
-2. **협회 초대 수락** — 가입한 이메일 주소(또는 GitHub 아이디)를 협회에 알려주면 초대 메일이 옵니다. 메일 안의 **View invitation** 버튼 → 열린 페이지에서 **Accept** 클릭. *(초대 = 비공개 저장소를 볼 수 있게 해 주는 접근 권한입니다.)*
-3. **GitHub Desktop 설치·로그인** — `https://desktop.github.com` 접속 → **Download** → 설치 후 실행 → **Sign in to GitHub.com** 클릭 → 방금 만든 계정으로 로그인 → 브라우저에 **Authorize**(허용) 버튼이 나오면 클릭. *(GitHub Desktop = 명령어 창 없이 마우스 클릭만으로 GitHub를 다루는 공식 앱입니다.)*
-4. **클론(내려받기)** — GitHub Desktop에서 **File → Clone Repository**(저장소 복제) → 목록에서 **install_JAARVIS** 선택 → 저장 위치를 확인하고(기본: Mac은 `문서(Documents)/GitHub`, Windows는 `문서\GitHub`) → **Clone** 클릭.
+> **가장 빠른 길 — 계정 없이 ZIP 받기**: 브라우저에서 `https://github.com/barnanacle/install_JAARVIS` → 초록색 **Code** → **Download ZIP** → 압축 해제. 끝입니다. 아래 GitHub Desktop 방식은 **나중에 개선판을 클릭 한 번으로 받고 싶을 때**만 하시면 됩니다.
+
+1. **GitHub 계정 만들기** — 브라우저에서 `https://github.com` 접속 → **Sign up** 클릭 → 이메일·비밀번호·아이디 입력 → 이메일로 온 인증 코드를 입력하면 가입 완료. *(ZIP만 받을 거면 이 단계도 필요 없습니다.)*
+2. **GitHub Desktop 설치·로그인** — `https://desktop.github.com` 접속 → **Download** → 설치 후 실행 → **Sign in to GitHub.com** 클릭 → 방금 만든 계정으로 로그인 → 브라우저에 **Authorize**(허용) 버튼이 나오면 클릭. *(GitHub Desktop = 명령어 창 없이 마우스 클릭만으로 GitHub를 다루는 공식 앱입니다.)*
+3. **클론(내려받기)** — GitHub Desktop에서 **File → Clone Repository**(저장소 복제) → **URL** 탭에 `barnanacle/install_JAARVIS` 입력 → 저장 위치를 확인하고(기본: Mac은 `문서(Documents)/GitHub`, Windows는 `문서\GitHub`) → **Clone** 클릭.
 
 ✅ **이렇게 되면 성공**: 내 컴퓨터의 문서 폴더 안 `GitHub/install_JAARVIS` 폴더가 생기고, 그 안에 지금 이 README.md가 들어 있습니다.
-❗ 목록에 install_JAARVIS가 안 보이면: 2번의 초대 수락이 아직 안 된 것입니다 — 초대 메일을 다시 확인해 Accept를 누르세요.
+❗ 목록에서 안 보이면: **URL** 탭에 `barnanacle/install_JAARVIS`를 직접 입력하세요(공개 저장소라 검색·로그인 없이 받아집니다).
 💡 명령 실행이 가능한 AI 앱(Codex 데스크톱 등)을 이미 쓰고 있다면, AI에게 이렇게 부탁해도 됩니다: **"이 주소를 내 컴퓨터에 클론해줘: https://github.com/barnanacle/install_JAARVIS"**
 
 > **업데이트 받기** — 협회가 꾸러미를 개선하면 새로 내려받을 필요가 없습니다. GitHub Desktop을 열고 상단의 **Fetch origin** 버튼을 클릭 → 받을 것이 있으면 같은 자리에 나타나는 **Pull origin** 버튼을 한 번 더 클릭. 이것으로 끝입니다. 압축 파일을 주고받는 방식과 달리 **클릭 한 번으로 항상 최신 꾸러미를 유지**하는 것이 이 배포 방식의 장점입니다.
