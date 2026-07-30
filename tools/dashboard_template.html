@@ -1,0 +1,353 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>내 지식창고 대시보드</title>
+<!--
+  내 지식창고 대시보드 (오프라인 전용)
+
+  · 이 파일은 인터넷에 전혀 연결하지 않습니다. 바깥에서 글꼴·그림·코드를 받아오지 않고,
+    어디로도 정보를 보내지 않습니다. 인터넷을 꺼도 똑같이 열립니다.
+  · 숫자는 tools/make_dashboard.py 가 미리 채워 넣습니다. 아래 「데이터 자리」 한 줄만 바뀝니다.
+  · ⚠️ 이 파일에는 내 자료의 파일 이름이 들어갑니다. 웹에 올리거나 메일로 보내지 마세요.
+    (자세한 이유는 5_챗지피티/대시보드_사용법.md 의 「공개 금지」 절을 보세요.)
+-->
+<style>
+:root{
+  --bg:#f6f7f9; --card:#ffffff; --fg:#1c1f24; --muted:#5f6773; --line:#e3e6ea;
+  --accent:#2f6fd0; --accent-soft:#e8f0fc; --warn:#a4560a; --warn-bg:#fdf3e3; --warn-line:#f0d9ae;
+  --ok:#1f7a4d; --bar:#2f6fd0; --bar-bg:#e9edf3;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#14171b; --card:#1c2026; --fg:#e8eaed; --muted:#a3acb9; --line:#2c323a;
+    --accent:#7ba9ee; --accent-soft:#1e2937; --warn:#f0c07a; --warn-bg:#33291a; --warn-line:#5a4626;
+    --ok:#6fce9f; --bar:#5b8fdd; --bar-bg:#262c34;
+  }
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  background:var(--bg); color:var(--fg);
+  font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgun Gothic","맑은 고딕","Noto Sans KR","Segoe UI",sans-serif;
+  font-size:15px; line-height:1.65; -webkit-text-size-adjust:100%;
+}
+.wrap{max-width:1000px;margin:0 auto;padding:24px 16px 64px}
+h1{font-size:22px;margin:0 0 4px}
+h2{font-size:17px;margin:0 0 10px}
+h3{font-size:14px;margin:14px 0 6px;color:var(--muted);font-weight:600}
+p{margin:0 0 8px}
+.sub{color:var(--muted);font-size:13px;margin-bottom:18px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin:0 0 16px}
+.hint{color:var(--muted);font-size:12.5px;margin:2px 0 12px}
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin:0 0 16px}
+.tile{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.tile .num{font-size:28px;font-weight:700;line-height:1.2}
+.tile .lab{font-size:13px;color:var(--muted);margin-top:2px}
+.tile .note{font-size:12px;color:var(--muted);margin-top:6px}
+.warnbox{background:var(--warn-bg);border:1px solid var(--warn-line);color:var(--warn);border-radius:12px;padding:14px 16px;margin:0 0 16px;font-size:14px}
+.warnbox b{color:var(--warn)}
+.badge{display:inline-block;background:var(--warn);color:#fff;border-radius:999px;padding:1px 9px;font-size:12px;font-weight:700;margin-right:6px}
+.searchwrap{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:0 0 16px}
+#q{
+  flex:1 1 260px;min-width:220px;padding:11px 13px;font-size:15px;color:var(--fg);
+  background:var(--card);border:1px solid var(--line);border-radius:10px;font-family:inherit;
+}
+#q:focus{outline:2px solid var(--accent);outline-offset:1px}
+#qinfo{font-size:13px;color:var(--muted)}
+.rowlist{list-style:none;margin:0;padding:0}
+.rowlist li{padding:7px 0;border-top:1px solid var(--line);font-size:14px;display:flex;gap:10px;flex-wrap:wrap;align-items:baseline}
+.rowlist li:first-child{border-top:0}
+.rowlist .name{font-weight:600}
+.rowlist .meta{color:var(--muted);font-size:12.5px}
+.rowlist .gist{color:var(--muted);flex:1 1 240px;min-width:0;overflow-wrap:anywhere}
+.bars{margin:6px 0 0}
+.barrow{display:grid;grid-template-columns:minmax(90px,26%) 1fr auto;gap:10px;align-items:center;padding:5px 0;font-size:14px}
+.bar{background:var(--bar-bg);border-radius:6px;height:12px;overflow:hidden}
+.bar span{display:block;height:100%;background:var(--bar);border-radius:6px}
+.barnum{color:var(--muted);font-size:13px;min-width:44px;text-align:right}
+.empty{color:var(--muted);font-size:13.5px;padding:8px 0}
+.tag{display:inline-block;border:1px solid var(--line);background:var(--accent-soft);color:var(--accent);border-radius:6px;padding:0 7px;font-size:12px}
+.tag.plain{background:transparent;color:var(--muted)}
+.two{display:grid;grid-template-columns:1fr;gap:16px}
+@media(min-width:760px){.two{grid-template-columns:1fr 1fr}}
+.footer{color:var(--muted);font-size:12.5px;border-top:1px solid var(--line);padding-top:14px;margin-top:8px}
+.nodata{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:28px 20px;text-align:center}
+.nodata .big{font-size:19px;font-weight:700;margin-bottom:8px}
+.nodata .how{font-size:14px;color:var(--muted);line-height:1.9}
+code{background:var(--accent-soft);color:var(--accent);border-radius:5px;padding:1px 6px;font-size:13px}
+@media print{
+  body{background:#fff;color:#000;font-size:11pt}
+  .searchwrap,.hint{display:none}
+  .wrap{max-width:none;padding:0}
+  .card,.tile,.warnbox{break-inside:avoid;page-break-inside:avoid;border-color:#bbb}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <h1>내 지식창고 대시보드</h1>
+  <p class="sub" id="subline">숫자를 불러오는 중입니다…</p>
+
+  <div id="app"></div>
+
+  <p class="footer">
+    이 화면은 내 컴퓨터 안에서만 만들어집니다. 인터넷 연결·외부 전송·추가 요금이 전혀 없습니다.<br>
+    ⚠️ 이 파일에는 내 자료의 파일 이름이 들어갑니다 — <b>웹에 올리거나 메일로 보내지 마세요.</b>
+  </p>
+
+</div>
+
+<!-- ▼▼ 데이터 자리 — 이 한 줄만 바뀝니다 (make_dashboard.py가 자동으로 채웁니다) ▼▼ -->
+<script>const DATA = /*__DATA__*/ null;</script>
+<!-- ▲▲ 데이터 자리 끝 ▲▲ -->
+
+<script>
+(function(){
+  "use strict";
+
+  function esc(s){
+    return String(s == null ? "" : s)
+      .replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")
+      .replace(/"/g,"&quot;").replace(/'/g,"&#39;");
+  }
+  function num(n){ return (n == null || isNaN(n)) ? "—" : String(n); }
+  function get(o, k, d){ return (o && o[k] !== undefined && o[k] !== null) ? o[k] : d; }
+
+  var app = document.getElementById("app");
+
+  /* 데이터 자리가 비어 있거나 잘못 채워졌어도 빈 화면이 되지 않게 한다. */
+  var D = null;
+  try { D = DATA; } catch (e) { D = null; }
+
+  /* ── 데이터가 아직 없을 때: 빈 화면 대신 안내를 크게 보여 준다 ── */
+  if (!D) {
+    document.getElementById("subline").textContent = "아직 숫자가 들어 있지 않습니다.";
+    app.innerHTML =
+      '<div class="nodata">' +
+        '<div class="big">아직 숫자를 넣지 않았습니다</div>' +
+        '<div class="how">' +
+          '가장 쉬운 방법 — AI에게 이렇게 말씀하세요:<br>' +
+          '<code>대시보드 새로 그려줘</code><br><br>' +
+          '직접 하시려면 지식창고 폴더에서 <code>python3 tools/make_dashboard.py</code><br><br>' +
+          '자세한 안내: <b>5_챗지피티/대시보드_사용법.md</b>' +
+        '</div>' +
+      '</div>';
+    return;
+  }
+
+  var 요약 = get(D,"요약",{});
+  var 없음 = get(D,"지표없음",[]);
+
+  document.getElementById("subline").textContent =
+    "지식창고: " + get(D,"지식창고이름","(이름 없음)") +
+    " · 만든 시각: " + get(D,"생성시각","—") +
+    " · 이 화면은 만든 시각 기준의 사진입니다(자동으로 갱신되지 않습니다).";
+
+  var html = "";
+
+  /* ── 1. 민감정보 경고 배지 ── */
+  var 경고 = get(D,"경고",{});
+  var 마스킹 = get(경고,"마스킹건수",0);
+  if (마스킹 > 0) {
+    html += '<div class="warnbox">' +
+      '<span class="badge">민감정보 ' + num(마스킹) + '건</span>' +
+      '<b>사람 이름·전화번호처럼 보이는 표기를 가려서 표시했습니다.</b><br>' +
+      '가린 종류: ' + esc(get(경고,"유형",[]).join(", ") || "—") + '<br>' +
+      '이런 표기가 파일 이름·목차에 남아 있다는 뜻입니다. 의뢰인 관련 자료라면 ' +
+      '<b>서류함 폴더</b>로 옮기고, 위키 쪽 파일 이름에서는 이름·번호를 빼 주세요. ' +
+      '(가려진 것은 화면 표시일 뿐, 원래 파일은 그대로입니다.)' +
+      '</div>';
+  }
+
+  /* ── 2. 요약 타일 4개 ── */
+  function tile(n, lab, note){
+    return '<div class="tile"><div class="num">' + esc(n) + '</div>' +
+           '<div class="lab">' + esc(lab) + '</div>' +
+           (note ? '<div class="note">' + esc(note) + '</div>' : '') + '</div>';
+  }
+  var 횡단 = get(요약,"횡단비율",null);
+  html += '<div class="tiles">' +
+    tile(num(get(요약,"위키페이지수",null)), "정리된 위키 페이지", "지식이 쌓인 총량입니다") +
+    tile(num(get(요약,"미처리",null)), "아직 정리 안 된 자료", "AI에게 「자료 정리해줘」") +
+    tile(num(get(요약,"보류",null)), "보류 중인 자료", "오래 묵으면 한 번 결정하세요") +
+    tile(횡단 === null ? "—" : (횡단 + "%"), "분야를 넘는 연결 비율", "높을수록 지식이 서로 이어집니다") +
+    '</div>';
+
+  /* ── 3. 검색 ── */
+  html += '<div class="searchwrap">' +
+    '<input id="q" type="search" placeholder="검색: 페이지 이름 · 요지 · 파일 이름 (예: 계약)" autocomplete="off">' +
+    '<span id="qinfo"></span></div>';
+
+  /* ── 4. 영역별 분포(막대) ── */
+  var cats = get(D,"카테고리",[]);
+  html += '<section class="card"><h2>영역별 분포</h2>' +
+          '<p class="hint">한쪽에만 몰려 있다면, 비어 있는 영역의 자료를 먼저 정리해 보세요.</p>';
+  if (!cats.length) {
+    html += '<div class="empty">' + (없음.indexOf("카테고리") >= 0 ? "자료 없음 (wiki/index.md 를 찾지 못했습니다)" : "아직 영역이 없습니다") + '</div>';
+  } else {
+    var max = 1;
+    cats.forEach(function(c){ if (get(c,"페이지수",0) > max) max = c["페이지수"]; });
+    html += '<div class="bars">';
+    cats.forEach(function(c){
+      var v = get(c,"페이지수",0);
+      html += '<div class="barrow">' +
+        '<div>' + esc(c["이름"]) + '</div>' +
+        '<div class="bar"><span style="width:' + Math.round(v / max * 100) + '%"></span></div>' +
+        '<div class="barnum">' + num(v) + '쪽</div></div>';
+    });
+    html += '</div>';
+  }
+  html += '</section>';
+
+  /* ── 5. 영역별 목록 ── */
+  html += '<section class="card"><h2>영역별 목록</h2>' +
+          '<p class="hint">각 페이지 뒤의 숫자는 다른 페이지와 이어진 연결 수입니다. 2 미만이면 외딴 페이지가 됩니다.</p>';
+  if (!cats.length) {
+    html += '<div class="empty">자료 없음</div>';
+  } else {
+    cats.forEach(function(c){
+      html += '<h3>' + esc(c["이름"]) + ' <span class="tag plain">' + num(get(c,"페이지수",0)) + '쪽</span></h3>';
+      if (get(c,"설명","")) html += '<p class="hint">' + esc(c["설명"]) + '</p>';
+      var pages = get(c,"페이지",[]);
+      if (!pages.length) { html += '<div class="empty">아직 이 영역에는 페이지가 없습니다</div>'; return; }
+      html += '<ul class="rowlist">';
+      pages.forEach(function(p){
+        html += '<li data-s="' + esc((p["이름"]||"") + " " + (p["요지"]||"") + " " + c["이름"]) + '">' +
+          '<span class="name">' + esc(p["이름"]) + '</span>' +
+          '<span class="gist">' + esc(p["요지"] || "") + '</span>' +
+          '<span class="meta">연결 ' + num(p["링크수"]) + '</span></li>';
+      });
+      html += '</ul>';
+    });
+    var 미분류 = get(D,"미분류페이지",[]);
+    if (미분류.length) {
+      html += '<h3>목차에 없는 페이지 <span class="tag">' + 미분류.length + '</span></h3>' +
+              '<p class="hint">wiki 폴더에는 있는데 목차(index.md)에 등재되지 않은 페이지입니다. AI에게 「목차에 넣어줘」라고 하세요.</p><ul class="rowlist">';
+      미분류.forEach(function(p){
+        html += '<li data-s="' + esc(p) + '"><span class="name">' + esc(p) + '</span></li>';
+      });
+      html += '</ul>';
+    }
+  }
+  html += '</section>';
+
+  html += '<div class="two">';
+
+  /* ── 6. 최근 정리 ── */
+  var 최근 = get(D,"최근정리",[]);
+  html += '<section class="card"><h2>최근 정리 10건</h2>' +
+          '<p class="hint">작업 일지(wiki/log.md)에서 가져온 최신 기록입니다.</p>';
+  if (!최근.length) {
+    html += '<div class="empty">' + (없음.indexOf("최근정리") >= 0 ? "자료 없음 (wiki/log.md 를 찾지 못했습니다)" : "아직 기록이 없습니다") + '</div>';
+  } else {
+    html += '<ul class="rowlist">';
+    최근.forEach(function(r){
+      html += '<li data-s="' + esc((r["날짜"]||"") + " " + (r["내용"]||"")) + '">' +
+        '<span class="meta">' + esc(r["날짜"] || "") + '</span>' +
+        '<span class="gist">' + esc(r["내용"] || "") + '</span></li>';
+    });
+    html += '</ul>';
+  }
+  html += '</section>';
+
+  /* ── 7. 아직 정리 안 된 자료 ── */
+  var 미처리 = get(D,"미처리목록",[]);
+  html += '<section class="card"><h2>아직 정리 안 된 자료</h2>' +
+          '<p class="hint">DATA 폴더에는 있는데 처리 대장에 아직 없는 파일입니다. AI에게 「자료 정리해줘」라고 하세요.</p>';
+  if (없음.indexOf("미처리") >= 0) {
+    html += '<div class="empty">자료 없음 (DATA 폴더 또는 처리 대장을 찾지 못했습니다)</div>';
+  } else if (!미처리.length) {
+    html += '<div class="empty">👍 남은 자료가 없습니다. 모두 정리되었습니다.</div>';
+  } else {
+    html += '<ul class="rowlist">';
+    미처리.forEach(function(f){
+      html += '<li data-s="' + esc(f) + '"><span class="gist">' + esc(f) + '</span></li>';
+    });
+    html += '</ul>';
+    if (get(요약,"미처리",0) > 미처리.length) {
+      html += '<p class="hint">…이 밖에 ' + (요약["미처리"] - 미처리.length) + '건이 더 있습니다.</p>';
+    }
+  }
+  html += '</section>';
+
+  /* ── 8. 손볼 것 — 연결 부족 페이지 ── */
+  var 부족 = get(D,"링크부족",[]);
+  html += '<section class="card"><h2>손볼 것 · 연결이 부족한 페이지</h2>' +
+          '<p class="hint">연결이 2개 미만이면 나중에 찾기 어려운 외딴 페이지가 됩니다. AI에게 「건강검진해줘」라고 하면 연결 후보를 제안해 줍니다.</p>';
+  if (!부족.length) {
+    html += '<div class="empty">👍 모든 페이지가 2개 이상 이어져 있습니다.</div>';
+  } else {
+    html += '<ul class="rowlist">';
+    부족.forEach(function(p){
+      html += '<li data-s="' + esc(p["이름"]) + '"><span class="name">' + esc(p["이름"]) + '</span>' +
+        '<span class="meta">연결 ' + num(p["링크수"]) + '</span></li>';
+    });
+    html += '</ul>';
+  }
+  html += '</section>';
+
+  /* ── 9. 손볼 것 — 보류 항목 ── */
+  var 보류 = get(D,"보류목록",[]);
+  html += '<section class="card"><h2>손볼 것 · 보류 중인 자료</h2>' +
+          '<p class="hint">보류는 「나중에 정하기」입니다. 오래 묵은 것부터 한 번 결정해 주세요.</p>';
+  if (!보류.length) {
+    html += '<div class="empty">👍 보류 중인 자료가 없습니다.</div>';
+  } else {
+    html += '<ul class="rowlist">';
+    보류.forEach(function(b){
+      var days = (b["경과일"] == null) ? "" : (b["경과일"] + "일째");
+      html += '<li data-s="' + esc((b["자료"]||"") + " " + (b["사유"]||"")) + '">' +
+        '<span class="name">' + esc(b["자료"] || "") + '</span>' +
+        '<span class="gist">' + esc(b["사유"] || "사유 미기재") +
+          (b["해소조건"] ? " · 해소 조건: " + esc(b["해소조건"]) : "") + '</span>' +
+        '<span class="meta">' + esc(days) + '</span></li>';
+    });
+    html += '</ul>';
+  }
+  html += '</section>';
+
+  html += '</div>'; /* .two 끝 */
+
+  /* ── 10. 기억 파일 상태 ── */
+  var 기억 = get(D,"기억",[]);
+  html += '<section class="card"><h2>기억 파일 상태</h2>' +
+          '<p class="hint">기억은 짧게 유지해야 AI가 빠르게 읽습니다. 상한에 가까워지면 AI가 정리를 제안합니다.</p>';
+  if (!기억.length) {
+    html += '<div class="empty">자료 없음 (memory 폴더를 찾지 못했습니다)</div>';
+  } else {
+    html += '<ul class="rowlist">';
+    기억.forEach(function(m){
+      html += '<li><span class="name">' + esc(m["파일"]) + '</span>' +
+        '<span class="gist">' + num(m["줄수"]) + '줄 / 상한 ' + num(m["상한줄"]) + '줄' +
+        (m["글자수"] == null ? "" : (" · " + num(m["글자수"]) + "자")) + '</span>' +
+        '<span class="meta">' + esc(m["상태"] || "") + '</span></li>';
+    });
+    html += '</ul>';
+  }
+  html += '</section>';
+
+  app.innerHTML = html;
+
+  /* ── 검색 필터 (내 브라우저 안에서만 걸러 보여 줍니다) ── */
+  var q = document.getElementById("q");
+  var qinfo = document.getElementById("qinfo");
+  var items = Array.prototype.slice.call(app.querySelectorAll("li[data-s]"));
+  if (q) {
+    q.addEventListener("input", function(){
+      var v = q.value.trim().toLowerCase();
+      var hit = 0;
+      items.forEach(function(li){
+        var on = !v || li.getAttribute("data-s").toLowerCase().indexOf(v) >= 0;
+        li.style.display = on ? "" : "none";
+        if (on) hit++;
+      });
+      qinfo.textContent = v ? (hit + "건 찾았습니다") : "";
+    });
+  }
+})();
+</script>
+</body>
+</html>
