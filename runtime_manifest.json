@@ -1,0 +1,36 @@
+{
+  "version": 1,
+  "description": "수강생 PC에 설치하는 운영용 JARVIS 구성. 저장소의 0_~5_ 설명서 폴더와 .git은 설치하지 않는다.",
+  "copy": [
+    {"source": "AGENTS.md", "target": "AGENTS.md"},
+    {"source": "CLAUDE.md", "target": "CLAUDE.md"},
+    {"source": "사용안내.md", "target": "README.md"},
+    {"source": "dashboard.html", "target": "dashboard.html"},
+    {"source": ".gitignore", "target": ".gitignore"},
+    {"source": "DATA", "target": "DATA"},
+    {"source": "memory", "target": "memory"},
+    {"source": "tools", "target": "tools"},
+    {"source": "wiki", "target": "wiki"},
+    {"source": "문서작업", "target": "문서작업"},
+    {"source": "서류함", "target": "서류함"},
+    {"source": "2_도구/convert2md.py", "target": "tools/convert2md.py"},
+    {"source": "2_도구/hwp2md.py", "target": "tools/hwp2md.py"},
+    {"source": "2_도구/graph_normalize.py", "target": "tools/graph_normalize.py"},
+    {"source": "2_도구/graph_report_inferred.py", "target": "tools/graph_report_inferred.py"},
+    {"source": "2_도구/도구_사용법.md", "target": "tools/안내_파일변환.md"},
+    {"source": "2_도구/법령검색_MCP_설정.md", "target": "tools/안내_법령검색.md"},
+    {"source": "2_도구/graphify_설정.md", "target": "tools/안내_지식그래프.md"}
+  ],
+  "required_directories": ["DATA", "memory", "tools", "wiki", "문서작업", "서류함"],
+  "required_files": [
+    "AGENTS.md",
+    "CLAUDE.md",
+    "README.md",
+    "tools/convert2md.py",
+    "tools/hwp2md.py",
+    "wiki/index.md",
+    "memory/MEMORY.md"
+  ],
+  "must_not_install": ["0_설치", "1_시작", "2_도구", "3_사용법", "4_확장", "5_챗지피티"],
+  "never_copy_from_source": [".git"]
+}

@@ -58,8 +58,8 @@ def _setup_console() -> None:
 
 
 def _packet_tool_dirs() -> list:
-    """스크립트 옆 도구_경로.md 의 첫 경로 줄(설치 꾸러미 2_도구 위치)을 읽는다.
-    BOOTSTRAP 구축 시 지식창고 tools/ 로 복사된 사본이 패킷의 venv·rhwp 를 찾는 다리."""
+    """스크립트 옆 도구_경로.md에 기록된 추가 도구 위치를 읽는다.
+    운영 폴더 밖에 별도 변환 환경을 둔 경우에만 쓰는 선택 기능이다."""
     dirs = []
     memo = SCRIPT_DIR / "도구_경로.md"
     if memo.exists():
@@ -131,11 +131,10 @@ def find_rhwp(explicit: Optional[Path] = None) -> Optional[Path]:
 def _rhwp_missing_exit() -> None:
     print("❌ 한글 해석 프로그램(rhwp)을 찾을 수 없습니다.", file=sys.stderr)
     print(f"   찾아본 위치: {RHWP_DIR} (Mac은 rhwp, Windows는 rhwp.exe)", file=sys.stderr)
-    print("   해결 방법 1) 0_설치/MAC_설치.md 또는 0_설치/WINDOWS_설치.md 의"
-          " rhwp 설치 단계를 다시 확인해 주세요.", file=sys.stderr)
-    print("   해결 방법 2) https://github.com/edwardkim/rhwp/releases 에서 v0.7.17 을"
+    print("   AI에게 \"tools의 HWP·HWPX 변환 환경을 준비해줘\"라고 요청하세요.", file=sys.stderr)
+    print("   또는 https://github.com/edwardkim/rhwp/releases 에서 v0.7.17 을"
           " 내려받아 압축을 풀고, 실행 파일을 위 rhwp/ 폴더에 넣어 주세요.", file=sys.stderr)
-    print("   더 자세한 도움말: 3_사용법/FAQ_문제해결.md", file=sys.stderr)
+    print("   더 자세한 도움말: tools/안내_파일변환.md", file=sys.stderr)
     sys.exit(2)
 
 
@@ -608,7 +607,7 @@ def main() -> None:
                 print(f"❌ 변환 실패: {f.name}")
                 print(f"   이유: {e}")
                 print("   → 파일이 한글 프로그램에서 열려 있으면 닫고 다시 시도해 주세요."
-                      " 계속 실패하면 3_사용법/FAQ_문제해결.md 를 참고하세요.")
+                      " 계속 실패하면 tools/안내_파일변환.md 를 참고하세요.")
 
         if root.is_dir() and not found_any:
             print(f"ℹ️  이 폴더에는 한글 문서(.hwp/.hwpx)가 없습니다: {root}")

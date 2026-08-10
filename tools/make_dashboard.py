@@ -632,7 +632,7 @@ def main(argv):
     if tpl_text is None:
         say("❌ 대시보드 서식 파일을 찾지 못했습니다.")
         say("   찾은 곳: tools/" + TEMPLATE_NAME + " · " + OUTPUT_NAME)
-        say("   AI에게 「5_챗지피티/templates/dashboard.html 을 tools/" + TEMPLATE_NAME + " 로 복사해줘」라고 말씀하세요.")
+        say("   AI에게 「JARVIS 운영 꾸러미의 tools를 점검하고 대시보드 원본을 복구해줘」라고 말씀하세요.")
         return 1
 
     mask = Masker(guess_names=guess_names)

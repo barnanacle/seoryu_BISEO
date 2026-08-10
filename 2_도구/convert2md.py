@@ -16,8 +16,7 @@ md(마크다운)로 변환합니다.
   * 한글 문서(.hwp / .hwpx)는 이 도구가 아니라 같은 폴더의 hwp2md.py 를 사용하세요.
 
 필요한 것: Python 3.11 이상 + markitdown 패키지.
-  0_설치 폴더의 설치 스크립트를 실행했다면 이 스크립트 옆의 venv/ 폴더에
-  이미 준비되어 있고, 이 스크립트가 자동으로 찾아 사용합니다.
+  준비되어 있지 않으면 AI에게 "tools의 파일 변환 환경을 준비해줘"라고 요청하세요.
 
 자세한 설명은 같은 폴더의 도구_사용법.md 를 보세요.
 """
@@ -63,8 +62,8 @@ def _setup_console() -> None:
 
 
 def _packet_tool_dirs() -> list:
-    """스크립트 옆 도구_경로.md 의 첫 경로 줄(설치 꾸러미 2_도구 위치)을 읽는다.
-    BOOTSTRAP 구축 시 지식창고 tools/ 로 복사된 사본이 패킷의 venv·rhwp 를 찾는 다리."""
+    """스크립트 옆 도구_경로.md에 기록된 추가 도구 위치를 읽는다.
+    운영 폴더 밖에 별도 변환 환경을 둔 경우에만 쓰는 선택 기능이다."""
     dirs = []
     memo = SCRIPT_DIR / "도구_경로.md"
     if memo.exists():
@@ -113,13 +112,12 @@ def _ensure_markitdown() -> None:
         )
 
     print("❌ 변환 프로그램(markitdown)이 설치되어 있지 않습니다.", file=sys.stderr)
-    print("   해결 방법 1) 0_설치 폴더의 설치 스크립트를 다시 실행해 주세요.", file=sys.stderr)
     print(
-        "   해결 방법 2) AI에게 이렇게 말해 주세요: "
+        "   AI에게 이렇게 말해 주세요: "
         "\"markitdown을 설치해줘 (pip install 'markitdown[all]')\"",
         file=sys.stderr,
     )
-    print("   더 자세한 도움말: 3_사용법/FAQ_문제해결.md", file=sys.stderr)
+    print("   더 자세한 도움말: tools/안내_파일변환.md", file=sys.stderr)
     sys.exit(2)
 
 
@@ -230,7 +228,7 @@ def main() -> None:
                 print(f"❌ 변환 실패: {f.name}")
                 print(f"   이유: {type(e).__name__}: {e}")
                 print("   → 파일이 다른 프로그램에서 열려 있으면 닫고 다시 시도해 주세요."
-                      " 계속 실패하면 3_사용법/FAQ_문제해결.md 를 참고하세요.")
+                      " 계속 실패하면 tools/안내_파일변환.md 를 참고하세요.")
 
     print("\n===== 변환 결과 =====")
     line = f"성공 {counts['ok']}건 · 건너뜀 {counts['skip']}건 · 실패 {counts['fail']}건"
