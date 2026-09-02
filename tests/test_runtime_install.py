@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import json
+import re
 import subprocess
 import sys
 import tempfile
@@ -74,6 +75,22 @@ def main() -> int:
         readme = (target / "README.md").read_text(encoding="utf-8")
         for folder in ("DATA", "서류함", "문서작업", "wiki", "memory", "tools"):
             assert folder in readme
+
+        skill_root = target / ".agents/skills/form-template-filler"
+        skill_text = "\n".join(
+            path.read_text(encoding="utf-8")
+            for path in sorted(skill_root.rglob("*"))
+            if path.is_file() and path.suffix in {".md", ".yaml", ".yml"}
+        )
+        for phrase in ("fields.json", "공식 서식", "산출/_tmp", "【확인 필요】", "법령명·조문·별표"):
+            assert phrase in skill_text, phrase
+        assert "/Users/" not in skill_text
+        assert not re.search(r"\b01[016789][ -]?\d{3,4}[ -]?\d{4}\b", skill_text)
+        assert not list(skill_root.rglob("*.pdf"))
+        assert not list(skill_root.rglob("*.docx"))
+        assert (target / "tools/안내_반복서식.md").read_text(encoding="utf-8") == (
+            skill_root / "references/implementation-guide.md"
+        ).read_text(encoding="utf-8")
 
         constitution = (target / "AGENTS.md").read_text(encoding="utf-8")
         for trigger in ("wiki에 반영해", "환류해", "인젝션해"):
