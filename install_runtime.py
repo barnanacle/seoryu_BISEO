@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """install_JAARVIS 저장소에서 수강생용 운영 꾸러미만 복사한다.
 
-저장소의 0_~5_ 폴더는 설치·원본·참고 문서이므로 대상 폴더에 복사하지 않는다.
+저장소의 a_~f_ 폴더는 설치·원본·참고 문서이므로 대상 폴더에 복사하지 않는다.
 복사 목록은 runtime_manifest.json 한 곳에서 관리한다.
 """
 
@@ -37,7 +37,7 @@ def copy_without_overwrite(source: Path, target: Path, created: list[str], skipp
 
 def main() -> int:
     parser = argparse.ArgumentParser(
-        description="수강생용 JARVIS 운영 꾸러미를 숫자 설명서 폴더 없이 설치합니다."
+        description="수강생용 JARVIS 운영 꾸러미를 알파벳 접두어의 설명서 폴더 없이 설치합니다."
     )
     parser.add_argument("target", help="Codex 프로젝트로 만든 설치 대상 폴더")
     args = parser.parse_args()
@@ -79,9 +79,9 @@ def main() -> int:
 
     print("✅ 수강생용 JARVIS 운영 꾸러미 설치 완료")
     print(f"   위치: {target_root}")
-    print("   사용자가 넣는 곳: DATA · 서류함 · 문서작업")
+    print("   사용자가 넣는 곳: 1_수집자료실 · 2_수임업무철 · 3_문서작업실")
     print("   AI가 관리하는 곳: memory · wiki · tools")
-    print("   설치 제외 확인: 0_~5_ 설명서 폴더 (저장소의 .git도 복사하지 않음)")
+    print("   설치 제외 확인: a_~f_ 설명서 폴더 (저장소의 .git도 복사하지 않음)")
     print(f"   새 파일: {len(created)}개")
     if skipped:
         print(f"   기존 파일 보존(덮어쓰지 않음): {len(skipped)}개")

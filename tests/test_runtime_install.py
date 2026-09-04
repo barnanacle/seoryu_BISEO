@@ -3,6 +3,7 @@
 
 from __future__ import annotations
 
+import importlib.util
 import json
 import re
 import subprocess
@@ -13,21 +14,23 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 MANIFEST = json.loads((ROOT / "runtime_manifest.json").read_text(encoding="utf-8"))
+SOURCE_DIRS = ("1_수집자료실", "2_수임업무철", "3_문서작업실")
+LEGACY_DIRS = ("DATA", "서류함", "문서작업", "0_설치", "1_시작", "2_도구", "3_사용법", "4_확장", "5_챗지피티")
 
 INSTALL_FACING_DOCS = [
     ROOT / "README.md",
     ROOT / "설치프롬프트.md",
-    ROOT / "0_설치/MAC_설치.md",
-    ROOT / "0_설치/WINDOWS_설치.md",
-    ROOT / "0_설치/설치_점검표.md",
-    ROOT / "1_시작/BOOTSTRAP.md",
-    ROOT / "5_챗지피티/README.md",
-    ROOT / "5_챗지피티/앱설치_설정.md",
-    ROOT / "5_챗지피티/Codex_설치_상세.md",
-    ROOT / "5_챗지피티/붙여넣기_프롬프트.md",
-    ROOT / "5_챗지피티/BOOTSTRAP_CHATGPT.md",
-    ROOT / "5_챗지피티/실측_점검표.md",
-    ROOT / "5_챗지피티/문제해결_보충.md",
+    ROOT / "a_설치/MAC_설치.md",
+    ROOT / "a_설치/WINDOWS_설치.md",
+    ROOT / "a_설치/설치_점검표.md",
+    ROOT / "b_시작/BOOTSTRAP.md",
+    ROOT / "f_챗지피티/README.md",
+    ROOT / "f_챗지피티/앱설치_설정.md",
+    ROOT / "f_챗지피티/Codex_설치_상세.md",
+    ROOT / "f_챗지피티/붙여넣기_프롬프트.md",
+    ROOT / "f_챗지피티/BOOTSTRAP_CHATGPT.md",
+    ROOT / "f_챗지피티/실측_점검표.md",
+    ROOT / "f_챗지피티/문제해결_보충.md",
 ]
 
 BANNED_INSTALL_PHRASES = (
@@ -36,8 +39,60 @@ BANNED_INSTALL_PHRASES = (
     "패킷 ZIP",
     "GitHub Desktop으로 클론",
     "GitHub Desktop으로 복제",
-    "1_시작/BOOTSTRAP.md를 읽고",
+    "b_시작/BOOTSTRAP.md를 읽고",
 )
+
+
+def check_source_tools(target: Path) -> None:
+    """새 경로의 미처리 집계·처리 대장 대조·개인 자료 제외를 확인한다."""
+    for rel in (
+        "1_수집자료실/행정절차·공통/guide.pdf",
+        "1_수집자료실/행정절차·공통/pending.pdf",
+        "2_수임업무철/case/private.md",
+        "3_문서작업실/draft.md",
+    ):
+        path = target / rel
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text("synthetic fixture", encoding="utf-8")
+
+    ledger = "1_수집자료실/행정절차·공통/guide.pdf\t새페이지\tguide\t2026-09-04\n"
+    (target / "wiki/.ingest-ledger.tsv").write_text(ledger, encoding="utf-8")
+    for path in (target / "tools/make_dashboard.py", ROOT / "f_챗지피티/templates/tools_make_dashboard.py"):
+        spec = importlib.util.spec_from_file_location("dashboard_path_test", path)
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+        paths, _, _ = module.parse_ledger(ledger.replace("/", "\\"))
+        assert "1_수집자료실/행정절차·공통/guide.pdf" in paths
+        assert "행정절차·공통/guide.pdf" in paths
+
+        original_read = module.read_text
+
+        def guarded_read(filename):
+            relative = Path(filename).relative_to(target)
+            assert relative.parts[0] not in SOURCE_DIRS, relative
+            return original_read(filename)
+
+        module.read_text = guarded_read
+        payload = module.build_data(str(target), lambda text: text)
+        assert payload["요약"]["미처리"] == 1, payload["요약"]
+        assert "미처리" not in payload["지표없음"]
+        template = (target / "tools/dashboard_template.html").read_text(encoding="utf-8")
+        rendered = module.inject(template, payload)
+        assert "const DATA = /*__DATA__*/ {" in rendered
+        assert "private.md" not in rendered and "draft.md" not in rendered
+
+    # 입력 폴더 이름이 wiki 하위에 생겨도 개인정보 점검은 건너뛴다.
+    for folder in SOURCE_DIRS:
+        nested = target / "wiki" / folder
+        nested.mkdir()
+        (nested / "private.md").write_text("synthetic fixture", encoding="utf-8")
+    for path in (target / "tools/pii_check.py", ROOT / "f_챗지피티/templates/tools_pii_check.py"):
+        spec = importlib.util.spec_from_file_location("pii_path_test", path)
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+        for filename in module.iter_files(str(target)):
+            relative = Path(filename).relative_to(target)
+            assert not set(relative.parts) & set(SOURCE_DIRS), relative
 
 
 def main() -> int:
@@ -66,14 +121,27 @@ def main() -> int:
             assert (target / rel).is_file(), rel
         for rel in MANIFEST["must_not_install"]:
             assert not (target / rel).exists(), rel
+        for rel in LEGACY_DIRS:
+            assert not (ROOT / rel).exists(), rel
+            assert not (target / rel).exists(), rel
+        assert {p.name for p in target.iterdir() if p.is_dir() and p.name[0].isdigit()} == set(SOURCE_DIRS)
         assert not (target / ".git").exists()
 
+        for item in MANIFEST["copy"]:
+            source, destination = ROOT / item["source"], target / item["target"]
+            files = source.rglob("*") if source.is_dir() else [source]
+            for original in files:
+                if original.is_file():
+                    copied = destination / original.relative_to(source) if source.is_dir() else destination
+                    assert copied.read_bytes() == original.read_bytes(), copied
+
         assert (target / "AGENTS.md").read_bytes() == (target / "CLAUDE.md").read_bytes()
+        assert (target / "AGENTS.md").stat().st_size <= 30_000
         assert not list(target.rglob("__pycache__"))
         assert not list(target.rglob("*.pyc"))
 
         readme = (target / "README.md").read_text(encoding="utf-8")
-        for folder in ("DATA", "서류함", "문서작업", "wiki", "memory", "tools"):
+        for folder in ("1_수집자료실", "2_수임업무철", "3_문서작업실", "wiki", "memory", "tools"):
             assert folder in readme
 
         skill_root = target / ".agents/skills/form-template-filler"
@@ -95,10 +163,18 @@ def main() -> int:
         constitution = (target / "AGENTS.md").read_text(encoding="utf-8")
         for trigger in ("wiki에 반영해", "환류해", "인젝션해"):
             assert trigger in constitution
-        for source in ("DATA/", "서류함/", "문서작업/"):
+        for source in ("1_수집자료실/", "2_수임업무철/", "3_문서작업실/"):
             assert source in constitution
         assert "이미 반영된 자료이므로 건너뛴다" in constitution
-        assert "서류함/#sha256:" in constitution
+        assert "2_수임업무철/#sha256:" in constitution
+
+        ignored = subprocess.run(
+            ["git", "-C", str(ROOT), "-c", "core.quotePath=false", "check-ignore", "--no-index", "--stdin"],
+            input="2_수임업무철/case/private.pdf\n3_문서작업실/draft.docx\n2_수임업무철/안내.md\n3_문서작업실/안내.md\n",
+            text=True, capture_output=True, check=True,
+        )
+        assert ignored.stdout.splitlines() == ["2_수임업무철/case/private.pdf", "3_문서작업실/draft.docx"]
+        check_source_tools(target)
 
     print("✅ clean runtime install test passed")
     return 0

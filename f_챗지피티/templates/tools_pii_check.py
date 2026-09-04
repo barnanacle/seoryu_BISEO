@@ -34,7 +34,7 @@ try:
 except ImportError:  # 같은 폴더에 make_dashboard.py 가 없을 때
     print("❌ 같은 tools 폴더 안의 make_dashboard.py 를 찾지 못했습니다.")
     print("   두 파일은 함께 있어야 합니다(판정 규칙을 나눠 쓰기 때문입니다).")
-    print("   AI에게 「JARVIS 운영 꾸러미의 tools를 점검하고 빠진 파일을 복구해줘」라고 말씀하세요.")
+    print("   AI에게 「f_챗지피티/templates/tools_make_dashboard.py 를 tools/make_dashboard.py 로 복사해줘」라고 말씀하세요.")
     sys.exit(1)
 
 SCAN_DIRS = ["wiki", "memory"]          # 여기만 훑습니다
