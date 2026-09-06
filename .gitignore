@@ -23,3 +23,7 @@ __pycache__/
 # 구축·점검 부산물
 _쓰기점검.txt
 Thumbs.db
+
+# Opinion writer cases, generated documents, and local dependencies
+tools/opinion_writer/산출/
+tools/opinion_writer/.venv/

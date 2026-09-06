@@ -18,13 +18,20 @@ SOURCE_ROOT = Path(__file__).resolve().parent
 MANIFEST_PATH = SOURCE_ROOT / "runtime_manifest.json"
 
 
-def copy_without_overwrite(source: Path, target: Path, created: list[str], skipped: list[str]) -> None:
-    if source.name in {"__pycache__", ".DS_Store", "Thumbs.db"} or source.suffix == ".pyc":
+def source_is_excluded(source: Path, source_root: Path, exclusions=()) -> bool:
+    relative=source.relative_to(source_root).as_posix()
+    return (any(part in {"__pycache__", ".DS_Store", "Thumbs.db", ".venv"} for part in source.relative_to(source_root).parts)
+            or source.suffix == ".pyc" or source.is_symlink()
+            or any(relative==item or relative.startswith(item.rstrip('/')+'/') for item in exclusions))
+
+
+def copy_without_overwrite(source: Path, target: Path, created: list[str], skipped: list[str], *, source_root=SOURCE_ROOT, exclusions=()) -> None:
+    if source_is_excluded(source,source_root,exclusions):
         return
     if source.is_dir():
         target.mkdir(parents=True, exist_ok=True)
         for child in sorted(source.iterdir(), key=lambda p: p.name):
-            copy_without_overwrite(child, target / child.name, created, skipped)
+            copy_without_overwrite(child, target / child.name, created, skipped, source_root=source_root, exclusions=exclusions)
         return
 
     target.parent.mkdir(parents=True, exist_ok=True)
@@ -43,8 +50,8 @@ def main() -> int:
     args = parser.parse_args()
 
     target_root = Path(args.target).expanduser().resolve()
-    if target_root == SOURCE_ROOT:
-        print("❌ 저장소 원본 폴더와 설치 대상 폴더는 서로 달라야 합니다.", file=sys.stderr)
+    if target_root == SOURCE_ROOT or SOURCE_ROOT in target_root.parents:
+        print("❌ 설치 대상은 저장소 원본 폴더 바깥에 두어야 합니다.", file=sys.stderr)
         return 2
     target_root.mkdir(parents=True, exist_ok=True)
 
@@ -58,7 +65,7 @@ def main() -> int:
         if not source.exists():
             print(f"❌ 원본 누락: {source}", file=sys.stderr)
             return 3
-        copy_without_overwrite(source, target, created, skipped)
+        copy_without_overwrite(source, target, created, skipped, exclusions=manifest["never_copy_from_source"])
 
     failures: list[str] = []
     for rel in manifest["required_directories"]:

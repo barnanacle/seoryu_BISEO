@@ -23,7 +23,7 @@
     {"source": "c_도구/graphify_설정.md", "target": "tools/안내_지식그래프.md"},
     {"source": ".agents/skills/form-template-filler/references/implementation-guide.md", "target": "tools/안내_반복서식.md"}
   ],
-  "required_directories": ["1_수집자료실", "2_수임업무철", "3_문서작업실", "memory", "tools", "wiki", ".agents/skills/form-template-filler"],
+  "required_directories": ["1_수집자료실", "2_수임업무철", "3_문서작업실", "memory", "tools", "wiki", ".agents/skills/form-template-filler", "tools/opinion_writer"],
   "required_files": [
     "AGENTS.md",
     "CLAUDE.md",
@@ -34,8 +34,18 @@
     "memory/MEMORY.md",
     "tools/안내_반복서식.md",
     ".agents/skills/form-template-filler/SKILL.md",
-    ".agents/skills/form-template-filler/references/implementation-guide.md"
+    ".agents/skills/form-template-filler/references/implementation-guide.md",
+    "tools/opinion_writer/AGENTS.md",
+    "tools/opinion_writer/README.md",
+    "tools/opinion_writer/사용_시퀀스.md",
+    "tools/opinion_writer/bin/dialogue_flow.py",
+    "tools/opinion_writer/bin/build_pdf.py",
+    "tools/opinion_writer/bin/doctor.py",
+    "tools/opinion_writer/서식/별지_상세의견서_템플릿.docx",
+    "tools/opinion_writer/서식/별지11호_의견제출서_공식서식.pdf",
+    "tools/opinion_writer/assets/fonts/OFL-NanumMyeongjo.txt",
+    "tools/opinion_writer/assets/fonts/OFL-NanumGothic.txt"
   ],
   "must_not_install": ["a_설치", "b_시작", "c_도구", "d_사용법", "e_확장", "f_챗지피티"],
-  "never_copy_from_source": [".git"]
+  "never_copy_from_source": [".git", "tools/opinion_writer/산출", "tools/opinion_writer/.venv"]
 }

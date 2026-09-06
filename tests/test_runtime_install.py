@@ -14,6 +14,9 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 MANIFEST = json.loads((ROOT / "runtime_manifest.json").read_text(encoding="utf-8"))
+sys.path.insert(0,str(ROOT))
+from install_runtime import source_is_excluded,copy_without_overwrite
+
 SOURCE_DIRS = ("1_수집자료실", "2_수임업무철", "3_문서작업실")
 LEGACY_DIRS = ("DATA", "서류함", "문서작업", "0_설치", "1_시작", "2_도구", "3_사용법", "4_확장", "5_챗지피티")
 
@@ -131,7 +134,7 @@ def main() -> int:
             source, destination = ROOT / item["source"], target / item["target"]
             files = source.rglob("*") if source.is_dir() else [source]
             for original in files:
-                if original.is_file():
+                if original.is_file() and not source_is_excluded(original,ROOT,MANIFEST["never_copy_from_source"]):
                     copied = destination / original.relative_to(source) if source.is_dir() else destination
                     assert copied.read_bytes() == original.read_bytes(), copied
 
@@ -174,6 +177,23 @@ def main() -> int:
             text=True, capture_output=True, check=True,
         )
         assert ignored.stdout.splitlines() == ["2_수임업무철/case/private.pdf", "3_문서작업실/draft.docx"]
+        for excluded in MANIFEST['never_copy_from_source']:
+            assert not (target/excluded).exists(),excluded
+        assert '질문지' in (target/'tools/opinion_writer/AGENTS.md').read_text(encoding='utf-8')
+        assert 'tools/opinion_writer/AGENTS.md' in constitution
+        # Synthetic private output in the source must never enter a new install.
+        fixture=Path(temp)/'copy_source';fixture.mkdir()
+        for name in ['tools/opinion_writer/산출/private.txt','tools/opinion_writer/.venv/private.txt','tools/opinion_writer/bin/safe.py']:
+            f=fixture/name;f.parent.mkdir(parents=True,exist_ok=True);f.write_text('synthetic')
+        output=Path(temp)/'copy_target'
+        copy_without_overwrite(fixture/'tools',output/'tools',[],[],source_root=fixture,exclusions=MANIFEST['never_copy_from_source'])
+        assert (output/'tools/opinion_writer/bin/safe.py').is_file()
+        assert not (output/'tools/opinion_writer/산출').exists()
+        assert not (output/'tools/opinion_writer/.venv').exists()
+        # Reinstallation preserves the user's modified existing files.
+        (target/'README.md').write_text('user content',encoding='utf-8')
+        subprocess.run([sys.executable,str(ROOT/'install_runtime.py'),str(target)],check=True)
+        assert (target/'README.md').read_text(encoding='utf-8')=='user content'
         check_source_tools(target)
 
     print("✅ clean runtime install test passed")

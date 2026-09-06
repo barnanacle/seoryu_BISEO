@@ -1,0 +1,189 @@
+{
+  "version": "portable-nanum-v1",
+  "reference": "행정절차법 시행규칙 별지 제11호 공식 서식",
+  "page_pt": [
+    595,
+    842
+  ],
+  "fonts": {
+    "body": "NanumMyeongjo",
+    "form": "NanumGothic"
+  },
+  "annex": {
+    "left_pt": 70.92,
+    "right_pt": 70.48,
+    "top_pt": 67.48,
+    "bottom_pt": 70.92,
+    "body_size_pt": 12,
+    "body_tracking_pt": 1.2,
+    "line_pt": 30,
+    "first_indent_pt": 66,
+    "label_width_pt": 66,
+    "label_gap_pt": 30,
+    "label_x_pt": 70.92,
+    "value_x_pt": 166.92,
+    "title_size_pt": 20,
+    "title_before_pt": 28.8,
+    "title_line_pt": 40,
+    "title_after_pt": 41.2,
+    "meta_line_pt": 30,
+    "case_before_pt": 30,
+    "intent_before_pt": 86.5,
+    "heading_size_pt": 15,
+    "heading_line_pt": 37.5,
+    "heading_after_pt": 33.5,
+    "section_before_pt": 45,
+    "coordinate_tolerance_pt": 1.2,
+    "address_scale_percent": 95,
+    "target_scale_percent": 90,
+    "target_tracking_pt": -0.02,
+    "tag_visible_top_pt": 81.9,
+    "title_visible_top_pt": 142.3,
+    "meta_visible_top_pt": 221.9
+  },
+  "form": {
+    "의견제출인_성명": {
+      "box": [
+        148.32,
+        149.1,
+        385,
+        26
+      ],
+      "size": 9.96,
+      "min_size": 9,
+      "line": 16.02
+    },
+    "의견제출인_주소": {
+      "box": [
+        148.32,
+        197.3,
+        248,
+        26
+      ],
+      "size": 9.96,
+      "min_size": 8.5,
+      "line": 16.02
+    },
+    "의견제출인_전화번호": {
+      "box": [
+        430.8,
+        197.3,
+        103,
+        14
+      ],
+      "size": 9.96,
+      "min_size": 8.5,
+      "line": 12
+    },
+    "처분의_제목": {
+      "box": [
+        148.32,
+        249.1,
+        385,
+        36
+      ],
+      "size": 9.96,
+      "min_size": 9,
+      "line": 16.02
+    },
+    "당사자_명칭": {
+      "box": [
+        225.84,
+        307.3,
+        308,
+        27
+      ],
+      "size": 9,
+      "min_size": 8.5,
+      "line": 13
+    },
+    "당사자_주소": {
+      "box": [
+        225.84,
+        355.65,
+        308,
+        19
+      ],
+      "size": 9,
+      "min_size": 8.5,
+      "line": 10
+    },
+    "당사자_전화번호": {
+      "box": [
+        414,
+        377.1,
+        111,
+        10
+      ],
+      "size": 9,
+      "min_size": 8.5,
+      "line": 10
+    },
+    "의견": {
+      "box": [
+        200.64,
+        389.04,
+        336.96,
+        96.36
+      ],
+      "size": 9,
+      "min_size": 9,
+      "line": 14,
+      "align": "center",
+      "valign": "middle"
+    },
+    "기타": {
+      "box": [
+        200.64,
+        485.4,
+        336.96,
+        72.24
+      ],
+      "size": 9,
+      "min_size": 9,
+      "line": 14,
+      "align": "center",
+      "valign": "middle"
+    },
+    "작성일": {
+      "box": [
+        400,
+        608.6,
+        127,
+        14
+      ],
+      "size": 9,
+      "min_size": 9,
+      "line": 12,
+      "align": "right"
+    },
+    "의견제출인_서명": {
+      "box": [
+        310,
+        624,
+        144,
+        29
+      ],
+      "size": 9,
+      "min_size": 8.5,
+      "line": 13
+    },
+    "수신": {
+      "box": [
+        68.4,
+        662.4,
+        457,
+        17
+      ],
+      "size": 12,
+      "min_size": 9.5,
+      "line": 14
+    }
+  },
+  "reference_sha256": "2e021b4df5b475c5326437a6afc36498b4aa733725e318ad2ab146174f807a58",
+  "official_form_sha256": "2e021b4df5b475c5326437a6afc36498b4aa733725e318ad2ab146174f807a58",
+  "font_files": {
+    "body": "assets/fonts/NanumMyeongjo-Regular.ttf",
+    "form": "assets/fonts/NanumGothic-Regular.ttf"
+  }
+}
