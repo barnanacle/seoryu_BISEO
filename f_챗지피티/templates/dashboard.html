@@ -157,7 +157,7 @@ code{background:var(--accent-soft);color:var(--accent);border-radius:5px;padding
       '<b>사람 이름·전화번호처럼 보이는 표기를 가려서 표시했습니다.</b><br>' +
       '가린 종류: ' + esc(get(경고,"유형",[]).join(", ") || "—") + '<br>' +
       '이런 표기가 파일 이름·목차에 남아 있다는 뜻입니다. 의뢰인 관련 자료라면 ' +
-      '<b>2_수임업무철 폴더</b>로 옮기고, 위키 쪽 파일 이름에서는 이름·번호를 빼 주세요. ' +
+      '<b>2_업무철 폴더</b>로 옮기고, 위키 쪽 파일 이름에서는 이름·번호를 빼 주세요. ' +
       '(가려진 것은 화면 표시일 뿐, 원래 파일은 그대로입니다.)' +
       '</div>';
   }
@@ -256,9 +256,9 @@ code{background:var(--accent-soft);color:var(--accent);border-radius:5px;padding
   /* ── 7. 아직 정리 안 된 자료 ── */
   var 미처리 = get(D,"미처리목록",[]);
   html += '<section class="card"><h2>아직 정리 안 된 자료</h2>' +
-          '<p class="hint">1_수집자료실 폴더에는 있는데 처리 대장에 아직 없는 파일입니다. AI에게 「자료 정리해줘」라고 하세요.</p>';
+          '<p class="hint">1_자료실 폴더에는 있는데 처리 대장에 아직 없는 파일입니다. AI에게 「자료 정리해줘」라고 하세요.</p>';
   if (없음.indexOf("미처리") >= 0) {
-    html += '<div class="empty">자료 없음 (1_수집자료실 폴더 또는 처리 대장을 찾지 못했습니다)</div>';
+    html += '<div class="empty">자료 없음 (1_자료실 폴더 또는 처리 대장을 찾지 못했습니다)</div>';
   } else if (!미처리.length) {
     html += '<div class="empty">👍 남은 자료가 없습니다. 모두 정리되었습니다.</div>';
   } else {

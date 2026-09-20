@@ -16,9 +16,9 @@
          wiki/index.md · wiki/.ingest-ledger.tsv · wiki/log.md
          wiki/*.md (파일 이름과 [[링크]]만)
          memory/오늘메모.md · memory/나에대해.md · memory/업무규칙.md (줄 수·글자 수만)
-         1_수집자료실/** (파일 이름 목록만 — 파일 내용은 열지 않습니다)
-    3. 절대 열지 않는 곳: `2_수임업무철/`(의뢰인 실명 자료) · `3_문서작업실/` · 1_수집자료실 파일의 본문.
-       — graphify 안전 규칙과 같습니다: 인덱싱은 wiki 폴더만, 2_수임업무철과 1_수집자료실 본문은 제외.
+         1_자료실/** (파일 이름 목록만 — 파일 내용은 열지 않습니다)
+    3. 절대 열지 않는 곳: `2_업무철/`(의뢰인 실명 자료) · `3_작업실/` · 1_자료실 파일의 본문.
+       — graphify 안전 규칙과 같습니다: 인덱싱은 wiki 폴더만, 2_업무철과 1_자료실 본문은 제외.
     4. 쓰는 파일은 `dashboard.html` 하나뿐입니다. 그 밖의 어떤 파일도 만들거나 고치지 않습니다.
     5. 사람 이름·상호명·전화번호·사업자등록번호·접수번호·금액·주소·이메일·여권번호처럼
        보이는 표기는 화면에 가려서(마스킹) 표시합니다.
@@ -162,7 +162,7 @@ _STRONG_RULES = [
 #  (1) 직함·호칭이 뒤에 붙는 경우      : "김철수 대표", "김철수님"
 #  (2) 「의뢰인:」 같은 이름표가 앞에   : "담당자 김철수"
 #  (3) 조사가 뒤에 붙는 경우           : "김철수에게", "김철수가"
-#  (4) 파일 이름 안에서 구분기호로 끊긴 토막 : "홍길동_계약서.pdf", "2_수임업무철/김철수/"
+#  (4) 파일 이름 안에서 구분기호로 끊긴 토막 : "홍길동_계약서.pdf", "2_업무철/김철수/"
 # (3)(4)를 '띄어쓰기로 끊긴 세 글자 전부'로 넓히면 "서류를"·"조항별" 같은 보통 낱말까지
 # 가려 버립니다(실측 확인). 그래서 조사·구분기호가 붙은 자리로만 좁힙니다.
 _NAME_SUFFIX = ("님", "씨", "대표", "사장", "과장", "부장", "팀장", "주무관", "변호사", "행정사", "의뢰인", "고객")
@@ -343,8 +343,8 @@ def parse_ledger(text):
             continue  # 머리글 줄
         norm = nfc(src).replace("\\", "/").lstrip("./")
         paths.add(norm)
-        if norm.startswith("1_수집자료실/"):
-            paths.add(norm[len("1_수집자료실/"):])
+        if norm.startswith("1_자료실/"):
+            paths.add(norm[len("1_자료실/"):])
         stems.add(os.path.splitext(os.path.basename(norm))[0])
         if verdict.startswith("보류") or landed.startswith("보류"):
             reason, cond, started = "", "", when
@@ -416,7 +416,7 @@ def scan_wiki_pages(wiki_dir):
 
 
 # ─────────────────────────────────────────────────────────────
-# 읽기 — 1_수집자료실 폴더 (파일 이름 목록만, 내용은 열지 않음)
+# 읽기 — 1_자료실 폴더 (파일 이름 목록만, 내용은 열지 않음)
 # ─────────────────────────────────────────────────────────────
 
 def scan_data_files(data_dir):
@@ -459,7 +459,7 @@ def scan_memory(memory_dir):
 
 def build_data(root, mask):
     wiki_dir = os.path.join(root, "wiki")
-    data_dir = os.path.join(root, "1_수집자료실")
+    data_dir = os.path.join(root, "1_자료실")
     memory_dir = os.path.join(root, "memory")
     missing = []
 
@@ -530,7 +530,7 @@ def build_data(root, mask):
     ledger_text = read_text(os.path.join(wiki_dir, ".ingest-ledger.tsv"))
     done_paths, done_stems, holds = parse_ledger(ledger_text)
 
-    # 1_수집자료실 미처리
+    # 1_자료실 미처리
     if not os.path.isdir(data_dir) or ledger_text is None:
         missing.append("미처리")
         data_files, todo = [], []
@@ -539,7 +539,7 @@ def build_data(root, mask):
         todo = []
         for rel in data_files:
             stem = os.path.splitext(os.path.basename(rel))[0]
-            no_prefix = rel[len("1_수집자료실/"):] if rel.startswith("1_수집자료실/") else rel
+            no_prefix = rel[len("1_자료실/"):] if rel.startswith("1_자료실/") else rel
             if rel in done_paths or no_prefix in done_paths or stem in done_stems:
                 continue
             todo.append(rel)

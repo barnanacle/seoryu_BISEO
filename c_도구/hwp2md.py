@@ -557,7 +557,7 @@ def main() -> None:
     parser = argparse.ArgumentParser(
         prog="hwp2md",
         description="한글 문서(.hwp/.hwpx)를 md(마크다운)로 변환합니다.",
-        epilog="예시:  python hwp2md.py ../1_수집자료실          (1_수집자료실 폴더의 한글 문서 일괄 변환)\n"
+        epilog="예시:  python hwp2md.py ../1_자료실          (1_자료실 폴더의 한글 문서 일괄 변환)\n"
                "       python hwp2md.py 의견서.hwp        (파일 1개 변환)\n"
                "PDF·워드·엑셀 등은 convert2md.py 를 사용하세요.",
         formatter_class=argparse.RawDescriptionHelpFormatter,

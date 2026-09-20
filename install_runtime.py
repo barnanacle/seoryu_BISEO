@@ -86,7 +86,7 @@ def main() -> int:
 
     print("✅ 수강생용 JARVIS 운영 꾸러미 설치 완료")
     print(f"   위치: {target_root}")
-    print("   사용자가 넣는 곳: 1_수집자료실 · 2_수임업무철 · 3_문서작업실")
+    print("   사용자가 넣는 곳: 1_자료실 · 2_업무철 · 3_작업실")
     print("   AI가 관리하는 곳: memory · wiki · tools")
     print("   설치 제외 확인: a_~f_ 설명서 폴더 (저장소의 .git도 복사하지 않음)")
     print(f"   새 파일: {len(created)}개")
