@@ -11,7 +11,7 @@
     {"source": "memory", "target": "memory"},
     {"source": "tools", "target": "tools"},
     {"source": "wiki", "target": "wiki"},
-    {"source": "2_업무철", "target": "2_업무철"},
+    {"source": "2_서류철", "target": "2_서류철"},
     {"source": "3_작업실", "target": "3_작업실"},
     {"source": ".agents/skills/form-template-filler", "target": ".agents/skills/form-template-filler"},
     {"source": "c_도구/convert2md.py", "target": "tools/convert2md.py"},
@@ -23,7 +23,7 @@
     {"source": "c_도구/graphify_설정.md", "target": "tools/안내_지식그래프.md"},
     {"source": ".agents/skills/form-template-filler/references/implementation-guide.md", "target": "tools/안내_반복서식.md"}
   ],
-  "required_directories": ["1_자료실", "2_업무철", "3_작업실", "memory", "tools", "wiki", ".agents/skills/form-template-filler", "tools/opinion_writer"],
+  "required_directories": ["1_자료실", "2_서류철", "3_작업실", "memory", "tools", "wiki", ".agents/skills/form-template-filler", "tools/opinion_writer"],
   "required_files": [
     "AGENTS.md",
     "CLAUDE.md",

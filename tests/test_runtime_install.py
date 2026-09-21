@@ -17,7 +17,7 @@ MANIFEST = json.loads((ROOT / "runtime_manifest.json").read_text(encoding="utf-8
 sys.path.insert(0,str(ROOT))
 from install_runtime import source_is_excluded,copy_without_overwrite
 
-SOURCE_DIRS = ("1_자료실", "2_업무철", "3_작업실")
+SOURCE_DIRS = ("1_자료실", "2_서류철", "3_작업실")
 LEGACY_DIRS = ("DATA", "서류함", "문서작업", "0_설치", "1_시작", "2_도구", "3_사용법", "4_확장", "5_챗지피티")
 
 INSTALL_FACING_DOCS = [
@@ -51,7 +51,7 @@ def check_source_tools(target: Path) -> None:
     for rel in (
         "1_자료실/행정절차·공통/guide.pdf",
         "1_자료실/행정절차·공통/pending.pdf",
-        "2_업무철/case/private.md",
+        "2_서류철/case/private.md",
         "3_작업실/draft.md",
     ):
         path = target / rel
@@ -144,7 +144,7 @@ def main() -> int:
         assert not list(target.rglob("*.pyc"))
 
         readme = (target / "README.md").read_text(encoding="utf-8")
-        for folder in ("1_자료실", "2_업무철", "3_작업실", "wiki", "memory", "tools"):
+        for folder in ("1_자료실", "2_서류철", "3_작업실", "wiki", "memory", "tools"):
             assert folder in readme
 
         skill_root = target / ".agents/skills/form-template-filler"
@@ -166,17 +166,17 @@ def main() -> int:
         constitution = (target / "AGENTS.md").read_text(encoding="utf-8")
         for trigger in ("wiki에 반영해", "환류해", "인젝션해"):
             assert trigger in constitution
-        for source in ("1_자료실/", "2_업무철/", "3_작업실/"):
+        for source in ("1_자료실/", "2_서류철/", "3_작업실/"):
             assert source in constitution
         assert "이미 반영된 자료이므로 건너뛴다" in constitution
-        assert "2_업무철/#sha256:" in constitution
+        assert "2_서류철/#sha256:" in constitution
 
         ignored = subprocess.run(
             ["git", "-C", str(ROOT), "-c", "core.quotePath=false", "check-ignore", "--no-index", "--stdin"],
-            input="2_업무철/case/private.pdf\n3_작업실/draft.docx\n2_업무철/안내.md\n3_작업실/안내.md\n",
+            input="2_서류철/case/private.pdf\n3_작업실/draft.docx\n2_서류철/안내.md\n3_작업실/안내.md\n",
             text=True, capture_output=True, check=True,
         )
-        assert ignored.stdout.splitlines() == ["2_업무철/case/private.pdf", "3_작업실/draft.docx"]
+        assert ignored.stdout.splitlines() == ["2_서류철/case/private.pdf", "3_작업실/draft.docx"]
         for excluded in MANIFEST['never_copy_from_source']:
             assert not (target/excluded).exists(),excluded
         assert '질문지' in (target/'tools/opinion_writer/AGENTS.md').read_text(encoding='utf-8')
