@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""install_JAARVIS 저장소에서 수강생용 운영 꾸러미만 복사한다.
+"""seoryu_BISEO 저장소에서 수강생용 운영 꾸러미만 복사한다.
 
 저장소의 a_~f_ 폴더는 설치·원본·참고 문서이므로 대상 폴더에 복사하지 않는다.
 복사 목록은 runtime_manifest.json 한 곳에서 관리한다.

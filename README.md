@@ -1,4 +1,4 @@
-# 나만의 AI 지식창고 만들기 — install_JAARVIS
+# 나만의 AI 지식창고 만들기 — seoryu_BISEO
 
 이 저장소는 행정사 업무 자료를 쌓고, AI가 재사용 가능한 지식으로 정리하도록 돕는 JARVIS 운영 꾸러미입니다.
 
