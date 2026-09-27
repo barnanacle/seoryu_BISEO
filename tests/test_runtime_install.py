@@ -15,7 +15,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 MANIFEST = json.loads((ROOT / "runtime_manifest.json").read_text(encoding="utf-8"))
 sys.path.insert(0,str(ROOT))
-from install_runtime import source_is_excluded,copy_without_overwrite
+from install_runtime import source_is_excluded,copy_without_overwrite,is_os_metadata,verify_runtime
 
 SOURCE_DIRS = ("1_자료실", "2_서류철", "3_작업실")
 LEGACY_DIRS = ("DATA", "서류함", "문서작업", "0_설치", "1_시작", "2_도구", "3_사용법", "4_확장", "5_챗지피티")
@@ -108,7 +108,7 @@ def main() -> int:
 
     root_readme = (ROOT / "README.md").read_text(encoding="utf-8")
     assert "설치 방법은 하나입니다" in root_readme
-    assert "비어 있는 `JARVIS` 폴더" in root_readme
+    assert "비어 있는" in root_readme
     assert "Codex" in root_readme
 
     with tempfile.TemporaryDirectory(prefix="test_JAARVIS_runtime_") as temp:
@@ -181,6 +181,33 @@ def main() -> int:
             assert not (target/excluded).exists(),excluded
         assert '질문지' in (target/'tools/opinion_writer/AGENTS.md').read_text(encoding='utf-8')
         assert 'tools/opinion_writer/AGENTS.md' in constitution
+        # 운영체제가 만든 파일은 남겨 두되 설치 검증에서만 제외한다.
+        for rel in ('.DS_Store','1_자료실/.DS_Store','2_서류철/Thumbs.db','3_작업실/desktop.ini','1_자료실/._guide.pdf'):
+            (target/rel).write_bytes(b'os metadata')
+        assert is_os_metadata(Path('.DS_Store'))
+        assert is_os_metadata(Path('Thumbs.db'))
+        assert not is_os_metadata(Path('.gitignore'))
+        result=verify_runtime(target,MANIFEST)
+        assert not result['unexpected'],result
+        assert len(result['ignored_metadata'])==5,result
+        verified=subprocess.run([sys.executable,str(ROOT/'install_runtime.py'),str(target),'--verify-only'],capture_output=True,text=True)
+        assert verified.returncode==0,verified.stderr
+        assert '설치 검증 완료' in verified.stdout
+
+        metadata_target=Path(temp)/'metadata_before_install';metadata_target.mkdir()
+        (metadata_target/'.DS_Store').write_bytes(b'finder file')
+        first=subprocess.run([sys.executable,str(ROOT/'install_runtime.py'),str(metadata_target)],capture_output=True,text=True)
+        assert first.returncode==0,first.stderr
+        assert (metadata_target/'.DS_Store').read_bytes()==b'finder file'
+        assert '설치·검증 완료' in first.stdout
+
+        extra_target=Path(temp)/'extra_target'
+        subprocess.run([sys.executable,str(ROOT/'install_runtime.py'),str(extra_target)],check=True,capture_output=True)
+        (extra_target/'unknown.txt').write_text('keep me',encoding='utf-8')
+        extra=subprocess.run([sys.executable,str(ROOT/'install_runtime.py'),str(extra_target),'--verify-only'],capture_output=True,text=True)
+        assert extra.returncode==4 and 'unknown.txt' in extra.stderr
+        assert (extra_target/'unknown.txt').read_text(encoding='utf-8')=='keep me'
+
         # Synthetic private output in the source must never enter a new install.
         fixture=Path(temp)/'copy_source';fixture.mkdir()
         for name in ['tools/opinion_writer/산출/private.txt','tools/opinion_writer/.venv/private.txt','tools/opinion_writer/bin/safe.py']:
@@ -190,9 +217,10 @@ def main() -> int:
         assert (output/'tools/opinion_writer/bin/safe.py').is_file()
         assert not (output/'tools/opinion_writer/산출').exists()
         assert not (output/'tools/opinion_writer/.venv').exists()
-        # Reinstallation preserves the user's modified existing files.
+        # 재설치는 기존 파일을 보존하지만 내용 불일치를 완료로 판정하지 않는다.
         (target/'README.md').write_text('user content',encoding='utf-8')
-        subprocess.run([sys.executable,str(ROOT/'install_runtime.py'),str(target)],check=True)
+        rerun=subprocess.run([sys.executable,str(ROOT/'install_runtime.py'),str(target)],capture_output=True,text=True)
+        assert rerun.returncode==2 and 'changed_files' in rerun.stderr
         assert (target/'README.md').read_text(encoding='utf-8')=='user content'
         check_source_tools(target)
 

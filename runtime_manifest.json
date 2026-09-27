@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "description": "수강생 PC에 설치하는 운영용 JARVIS 구성. 저장소의 a_~f_ 설명서 폴더와 .git은 설치하지 않는다.",
+  "description": "수강생 PC에 설치하는 서류비서 운영 구성. 저장소의 a_~f_ 설명서 폴더와 .git은 설치하지 않는다.",
   "copy": [
     {"source": "AGENTS.md", "target": "AGENTS.md"},
     {"source": "CLAUDE.md", "target": "CLAUDE.md"},
