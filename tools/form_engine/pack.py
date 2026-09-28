@@ -38,7 +38,10 @@ def load_pack(reference: str | Path) -> dict:
         raise ValueError("꾸러미 pages에는 0부터 연속된 쪽과 칸 정의가 필요합니다.")
     data["_root"] = path.parent
     files = data.get("files", {})
-    for name in [files.get("form_pdf"), files.get("form_png"), files.get("annex_docx")]:
+    names = [files.get("form_pdf"), files.get("annex_docx"), files.get("font_docx")]
+    backgrounds = files.get("form_png", [])
+    names.extend(backgrounds if isinstance(backgrounds, list) else [backgrounds])
+    for name in names:
         if name and not resolve_asset(data, name).is_file():
             raise FileNotFoundError("꾸러미 자산을 찾을 수 없습니다: " + name)
     original = resolve_asset(data, files["form_pdf"])

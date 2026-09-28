@@ -14,10 +14,12 @@ def _xml_lines(value):
     return '</w:t><w:br/><w:t xml:space="preserve">'.join(escape(line) for line in str(value).split("\n"))
 
 
-def build_annex_docx(fields: dict, out_path: str | Path, pack: dict) -> Path:
+def build_annex_docx(fields: dict, out_path: str | Path, pack: dict) -> Path | None:
     annexes = pack.get("annexes", [])
-    if len(annexes) != 1 or annexes[0]["type"] == "none":
-        raise ValueError("DOCX 붙임 틀 하나가 필요한 꾸러미입니다.")
+    if not annexes or (len(annexes) == 1 and annexes[0]["type"] == "none"):
+        return None
+    if len(annexes) != 1:
+        raise ValueError("현재는 꾸러미당 붙임 틀 하나를 지원합니다.")
     annex = annexes[0]
     if annex["type"] not in {"narrative", "list"}:
         raise ValueError("지원하지 않는 붙임 유형: " + annex["type"])

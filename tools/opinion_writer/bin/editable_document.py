@@ -36,7 +36,8 @@ def shape(p,identifier,x,y,width,height,z=1,fill=False):
 
 
 def make_full_docx(annex_docx,blank_pdf,placements,destination,fields=None,
-                   profile=None,masks=None,title=None,field_names=None,unconfirmed_title=None):
+                   profile=None,masks=None,title=None,field_names=None,unconfirmed_title=None,
+                   font_template=None):
     from docx import Document
     from docx.oxml import OxmlElement
     from docx.oxml.ns import qn
@@ -44,8 +45,10 @@ def make_full_docx(annex_docx,blank_pdf,placements,destination,fields=None,
     profile=profile or json.loads((HERE/'서식/layout_profile.json').read_text())
     if blank_pdf is None:
         return make_generic_full_docx(annex_docx,fields or {},destination,
-                                      field_names=field_names,title=unconfirmed_title)
-    doc=Document(annex_docx);body=doc.element.body
+                                      field_names=field_names,title=unconfirmed_title,
+                                      font_template=font_template)
+    doc=Document(annex_docx or font_template) if (annex_docx or font_template) else Document()
+    body=doc.element.body
     annex_section=body.find(qn('w:sectPr'))
     reset=annex_section.find(qn('w:pgNumType'))
     if reset is None:reset=OxmlElement('w:pgNumType');annex_section.append(reset)
@@ -75,29 +78,38 @@ def make_full_docx(annex_docx,blank_pdf,placements,destination,fields=None,
                     node(rp,'{'+W+'}rFonts',{qn('w:'+key):profile['fonts']['form'] for key in ['ascii','hAnsi','eastAsia','cs']})
                     node(rp,'{'+W+'}sz',{qn('w:val'):str(round(size*2))});node(rp,'{'+W+'}spacing',{qn('w:val'):'0'})
                     node(run,'{'+W+'}t',{'{http://www.w3.org/XML/1998/namespace}space':'preserve'},entry['text'])
-            section_p=paragraph(holder);sp=section_p.find('{'+W+'}pPr');section=copy.deepcopy(annex_section)
+            section=copy.deepcopy(annex_section)
             for n in list(section):
                 if n.tag in [qn('w:footerReference'),qn('w:headerReference'),qn('w:pgNumType')]:section.remove(n)
             sz=section.find(qn('w:pgSz'));sz.set(qn('w:w'),str(round(width*20)));sz.set(qn('w:h'),str(round(height*20)))
             mar=section.find(qn('w:pgMar'))
             for key in ['top','right','bottom','left','header','footer','gutter']:mar.set(qn('w:'+key),'0')
-            typ=section.find(qn('w:type'))
-            if typ is None:typ=OxmlElement('w:type');section.append(typ)
-            typ.set(qn('w:val'),'nextPage');sp.append(section)
+            if annex_docx is None and index==len(pages)-1:
+                typ=section.find(qn('w:type'))
+                if typ is not None:section.remove(typ)
+                for item in list(annex_section):annex_section.remove(item)
+                for item in list(section):annex_section.append(item)
+            else:
+                section_p=paragraph(holder);sp=section_p.find('{'+W+'}pPr')
+                typ=section.find(qn('w:type'))
+                if typ is None:typ=OxmlElement('w:type');section.append(typ)
+                typ.set(qn('w:val'),'nextPage');sp.append(section)
             elements.extend(list(holder))
         for element in reversed(elements):body.insert(0,element)
         doc.core_properties.title=title or '의견제출서 전체 편집본';doc.save(destination)
     return Path(destination)
 
 
-def make_generic_full_docx(annex_docx,fields,destination,field_names=None,title=None):
+def make_generic_full_docx(annex_docx,fields,destination,field_names=None,title=None,
+                           font_template=None):
     from docx import Document
     from docx.shared import Pt
     from docx.enum.section import WD_SECTION_START
     from docx.enum.text import WD_ALIGN_PARAGRAPH
     from docx.oxml.ns import qn
     from build_pdf import FORM_KEYS
-    doc=Document(annex_docx);body=doc.element.body
+    doc=Document(annex_docx or font_template) if (annex_docx or font_template) else Document()
+    body=doc.element.body
     original_section=copy.deepcopy(body.find(qn('w:sectPr')))
     original=[copy.deepcopy(n) for n in body if n.tag!=qn('w:sectPr')]
     for n in list(body):
@@ -133,7 +145,8 @@ def validate_full_docx(full_docx,annex_pdf,placements,work_dir):
     import pdfplumber
     work_dir=Path(work_dir);full_pdf=work_dir/'full_editor.pdf'
     convert_docx(full_docx,full_pdf)
-    annex_pages=len(PdfReader(annex_pdf).pages);cover_count=len(PdfReader(full_pdf).pages)-annex_pages
+    annex_pages=len(PdfReader(annex_pdf).pages) if annex_pdf else 0
+    cover_count=len(PdfReader(full_pdf).pages)-annex_pages
     errors=[]
     if cover_count<1:errors.append('전체 편집본의 표지가 없습니다.')
     if placements and cover_count!=len(placements):errors.append('전체 편집본의 표지 쪽수가 다릅니다.')
@@ -145,8 +158,8 @@ def validate_full_docx(full_docx,annex_pdf,placements,work_dir):
                 if compact(entry['text']) not in text:errors.append('전체 편집본 표지 값 누락: '+entry['field'])
                 found=find_phrase(page,entry['text'],entry['top']-2,entry['top']+2,min_x=entry['left']-2,max_x=entry['left']+entry['width']+2)
                 if found is None:errors.append('전체 편집본 표지 위치 오류: '+entry['field'])
-    actual=render_pdf(full_pdf,work_dir/'full_check',first=cover_count+1)
-    expected=render_pdf(Path(annex_pdf),work_dir/'annex_check')
+    actual=render_pdf(full_pdf,work_dir/'full_check',first=cover_count+1) if annex_pages else []
+    expected=render_pdf(Path(annex_pdf),work_dir/'annex_check') if annex_pages else []
     comparisons=[compare_images(a,b) for a,b in zip(actual,expected)]
     if len(actual)!=len(expected) or any(not c['equal'] for c in comparisons):errors.append('전체 편집본의 별지가 원본 DOCX 별지와 다릅니다.')
     return {'passed':not errors,'errors':errors,'cover_pages':cover_count,'annex_pages':annex_pages,'comparisons':comparisons}

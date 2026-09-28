@@ -28,6 +28,13 @@ def derive(fields: dict, target: str, rule: dict) -> str:
     if name == "dot_date":
         parts = _date_parts(source)
         return ".   ".join(str(int(v)) for v in parts) + "." if parts else UNKNOWN
+    if name == "date_component":
+        parts = _date_parts(source)
+        if not parts:
+            return ""
+        year, month, day = map(int, parts)
+        datetime.date(year, month, day)
+        return str((year, month, day)[int(rule["component"])])
     if name == "opinion_signature":
         if target in fields:
             return str(fields[target])
@@ -60,12 +67,16 @@ def normalize_fields(fields: dict, pack: dict) -> dict:
     for name in cfg.get("required", []):
         if not str(result.get(name, "")).strip():
             result[name] = UNKNOWN
+    for name, spec in pack.get("fields", {}).items():
+        if name in result and spec["type"] != "repeat" and not isinstance(result[name], str):
+            raise ValueError("필드 값은 문자열이어야 합니다: " + name)
     return result
 
 
 def form_values(fields: dict, pack: dict, *, page: int = 0):
     specs = pack["pages"][page]["fields"]
-    values = {name: str(fields.get(name) or UNKNOWN) for name in specs}
+    values = {name: str(fields.get(name) or ("" if spec.get("blank_if_missing") else UNKNOWN))
+              for name, spec in specs.items()}
     representative = False
     for name, rule in pack.get("transforms", {}).items():
         if name not in values:

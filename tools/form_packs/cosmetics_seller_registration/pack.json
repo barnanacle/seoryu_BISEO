@@ -1,0 +1,394 @@
+{
+  "schema_version": 1,
+  "id": "cosmetics_seller_registration",
+  "title": "화장품책임판매업 등록신청서",
+  "legal_basis": {
+    "law": "화장품법 제3조제1항 전단",
+    "rule": "화장품법 시행규칙 제4조제2항",
+    "form": "별지 제3호서식",
+    "source_url": "https://www.law.go.kr/LSW/flDownload.do?bylClsCd=110202&flSeq=157585943&gubun="
+  },
+  "verified_on": "2026-09-28",
+  "form_sha256": "1e89100717b542f483337844f39a30e8c83a13beca0ac85af160268d5d5dda7e",
+  "files": {
+    "form_pdf": "form/official_form.pdf",
+    "form_png": [
+      "form/official_form_background-1.png",
+      "form/official_form_background-2.png"
+    ],
+    "annex_docx": "annex/requirements_checklist.docx",
+    "font_docx": "form/blank_font_template.docx"
+  },
+  "pages": [
+    {
+      "page": 0,
+      "size": [
+        595,
+        841
+      ],
+      "fields": {
+        "신청인_성명": {
+          "box": [
+            142,
+            160,
+            190,
+            21
+          ],
+          "size": 9,
+          "min_size": 8,
+          "line": 13
+        },
+        "신청인_전화번호": {
+          "box": [
+            342,
+            160,
+            190,
+            21
+          ],
+          "size": 9,
+          "min_size": 8,
+          "line": 13
+        },
+        "신청인_등록번호": {
+          "box": [
+            142,
+            224,
+            390,
+            17
+          ],
+          "size": 9,
+          "min_size": 8,
+          "line": 13
+        },
+        "등록기준지": {
+          "box": [
+            142,
+            255,
+            390,
+            20
+          ],
+          "size": 9,
+          "min_size": 8,
+          "line": 13
+        },
+        "신청인_주소": {
+          "box": [
+            142,
+            300,
+            390,
+            20
+          ],
+          "size": 9,
+          "min_size": 8,
+          "line": 13
+        },
+        "업소_상호": {
+          "box": [
+            142,
+            358,
+            190,
+            21
+          ],
+          "size": 9,
+          "min_size": 8,
+          "line": 13
+        },
+        "업소_전화번호": {
+          "box": [
+            342,
+            344,
+            190,
+            21
+          ],
+          "size": 9,
+          "min_size": 8,
+          "line": 13
+        },
+        "업소_소재지": {
+          "box": [
+            142,
+            386,
+            390,
+            21
+          ],
+          "size": 9,
+          "min_size": 8,
+          "line": 13
+        },
+        "관리자_성명": {
+          "box": [
+            142,
+            434,
+            190,
+            13
+          ],
+          "size": 8.3,
+          "min_size": 7.5,
+          "line": 10
+        },
+        "관리자_등록번호": {
+          "box": [
+            342,
+            434,
+            190,
+            13
+          ],
+          "size": 8.3,
+          "min_size": 7.5,
+          "line": 10
+        },
+        "관리자_자격구분": {
+          "box": [
+            142,
+            461,
+            390,
+            13
+          ],
+          "size": 8.3,
+          "min_size": 7.5,
+          "line": 10
+        },
+        "책임판매유형": {
+          "box": [
+            142,
+            482,
+            390,
+            14
+          ],
+          "size": 8.3,
+          "min_size": 7.5,
+          "line": 10
+        },
+        "제조업겸업여부": {
+          "box": [
+            142,
+            511,
+            390,
+            14
+          ],
+          "size": 8.3,
+          "min_size": 7.5,
+          "line": 10
+        },
+        "신청인_서명": {
+          "box": [
+            335,
+            585,
+            120,
+            15
+          ],
+          "size": 9,
+          "min_size": 8,
+          "line": 13
+        },
+        "작성일_년": {
+          "box": [
+            402,
+            570,
+            27,
+            12
+          ],
+          "size": 8.3,
+          "min_size": 8.3,
+          "line": 10,
+          "blank_if_missing": true
+        },
+        "작성일_월": {
+          "box": [
+            463,
+            570,
+            16,
+            12
+          ],
+          "size": 8.3,
+          "min_size": 8.3,
+          "line": 10,
+          "blank_if_missing": true
+        },
+        "작성일_일": {
+          "box": [
+            510,
+            570,
+            17,
+            12
+          ],
+          "size": 8.3,
+          "min_size": 8.3,
+          "line": 10,
+          "blank_if_missing": true
+        }
+      }
+    },
+    {
+      "page": 1,
+      "size": [
+        595,
+        841
+      ],
+      "fields": {}
+    }
+  ],
+  "masks": [],
+  "fields": {
+    "신청인_성명": {
+      "type": "text",
+      "required": true
+    },
+    "신청인_전화번호": {
+      "type": "text",
+      "required": true
+    },
+    "신청인_등록번호": {
+      "type": "text",
+      "required": true
+    },
+    "등록기준지": {
+      "type": "text",
+      "required": true
+    },
+    "신청인_주소": {
+      "type": "text",
+      "required": true
+    },
+    "업소_상호": {
+      "type": "text",
+      "required": true
+    },
+    "업소_전화번호": {
+      "type": "text",
+      "required": true
+    },
+    "업소_소재지": {
+      "type": "text",
+      "required": true
+    },
+    "관리자_성명": {
+      "type": "text",
+      "required": true
+    },
+    "관리자_등록번호": {
+      "type": "text",
+      "required": true
+    },
+    "관리자_자격구분": {
+      "type": "text",
+      "required": true
+    },
+    "책임판매유형": {
+      "type": "text",
+      "required": true
+    },
+    "제조업겸업여부": {
+      "type": "text",
+      "required": true
+    },
+    "작성일": {
+      "type": "text",
+      "required": true
+    },
+    "신청인_서명": {
+      "type": "text",
+      "required": true
+    },
+    "구비서류_목록": {
+      "type": "list",
+      "required": true
+    },
+    "작성일_년": {
+      "type": "text",
+      "required": false
+    },
+    "작성일_월": {
+      "type": "text",
+      "required": false
+    },
+    "작성일_일": {
+      "type": "text",
+      "required": false
+    }
+  },
+  "normalization": {
+    "required": [
+      "신청인_성명",
+      "신청인_전화번호",
+      "신청인_등록번호",
+      "등록기준지",
+      "신청인_주소",
+      "업소_상호",
+      "업소_전화번호",
+      "업소_소재지",
+      "관리자_성명",
+      "관리자_등록번호",
+      "관리자_자격구분",
+      "책임판매유형",
+      "제조업겸업여부",
+      "작성일",
+      "신청인_서명",
+      "구비서류_목록"
+    ],
+    "derived": {
+      "작성일_년": {
+        "name": "date_component",
+        "source": "작성일",
+        "component": 0
+      },
+      "작성일_월": {
+        "name": "date_component",
+        "source": "작성일",
+        "component": 1
+      },
+      "작성일_일": {
+        "name": "date_component",
+        "source": "작성일",
+        "component": 2
+      }
+    }
+  },
+  "transforms": {
+    "등록기준지": {
+      "name": "normalized_address"
+    },
+    "신청인_주소": {
+      "name": "normalized_address"
+    },
+    "업소_소재지": {
+      "name": "normalized_address"
+    }
+  },
+  "annexes": [
+    {
+      "type": "list",
+      "template": "annex/requirements_checklist.docx",
+      "list_fields": [
+        "구비서류_목록"
+      ],
+      "append_to_submission": false
+    }
+  ],
+  "output": {
+    "pdf_prefix": "화장품책임판매업_등록신청서_",
+    "annex_docx_prefix": "구비서류_확인표_",
+    "full_docx_prefix": "화장품책임판매업_등록신청서_전체편집본_",
+    "fallback_name_field": "업소_상호",
+    "verification_prefix": "검증",
+    "overlay_title": "등록신청서 입력값 레이어",
+    "full_docx_title": "화장품책임판매업 등록신청서 전체 편집본",
+    "unconfirmed_title": "화장품책임판매업 등록신청서 초안 · 제출 서식 확인 필요"
+  },
+  "form_mode": "official",
+  "validation": {
+    "type": "basic"
+  },
+  "profile": {
+    "version": "cosmetics-seller-2023-v1",
+    "page_pt": [
+      595,
+      841
+    ],
+    "fonts": {
+      "form": "NanumGothic",
+      "body": "NanumMyeongjo"
+    },
+    "form_docx_top_adjust_pt": -0.75
+  }
+}

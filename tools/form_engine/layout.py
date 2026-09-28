@@ -94,6 +94,8 @@ def create_overlay(fields, pdf_path, template, work_dir, pack,
         value = values.get(key, UNKNOWN)
         if custom_boxes is None:
             value += pack.get("suffixes", {}).get(key, "")
+        if not str(value).strip():
+            continue
         x, y, w, h = spec["box"]
         if x < 0 or y < 0 or x + w > width + .1 or y + h > height + .1:
             raise ValueError("서식 좌표 범위 오류: " + key)
