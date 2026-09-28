@@ -21,9 +21,9 @@
     {"source": "c_도구/도구_사용법.md", "target": "tools/안내_파일변환.md"},
     {"source": "c_도구/법령검색_MCP_설정.md", "target": "tools/안내_법령검색.md"},
     {"source": "c_도구/graphify_설정.md", "target": "tools/안내_지식그래프.md"},
-    {"source": ".agents/skills/form-template-filler/references/create-pack.md", "target": "tools/안내_반복서식.md"}
+    {"source": ".agents/skills/form-template-filler/references/implementation-guide.md", "target": "tools/안내_반복서식.md"}
   ],
-  "required_directories": ["1_자료실", "2_서류철", "3_작업실", "memory", "tools", "wiki", ".agents/skills/form-template-filler", "tools/opinion_writer", "tools/form_engine", "tools/form_packs/opinion_notice_11", "tools/form_packs/cosmetics_seller_registration"],
+  "required_directories": ["1_자료실", "2_서류철", "3_작업실", "memory", "tools", "wiki", ".agents/skills/form-template-filler", "tools/opinion_writer", "tools/form_engine", "tools/form_packs/opinion_notice_11"],
   "required_files": [
     "AGENTS.md",
     "CLAUDE.md",
@@ -35,16 +35,10 @@
     "tools/안내_반복서식.md",
     ".agents/skills/form-template-filler/SKILL.md",
     ".agents/skills/form-template-filler/references/implementation-guide.md",
-    ".agents/skills/form-template-filler/references/create-pack.md",
-    "tools/form_engine/bin/build.py",
-    "tools/form_engine/bin/propose_boxes.py",
     "tools/form_engine/engine.py",
     "tools/form_engine/tests/test_packs.py",
     "tools/form_packs/opinion_notice_11/pack.json",
     "tools/form_packs/opinion_notice_11/form/official_form.pdf",
-    "tools/form_packs/cosmetics_seller_registration/pack.json",
-    "tools/form_packs/cosmetics_seller_registration/form/official_form.pdf",
-    "tools/form_packs/cosmetics_seller_registration/annex/requirements_checklist.docx",
     "tools/opinion_writer/AGENTS.md",
     "tools/opinion_writer/README.md",
     "tools/opinion_writer/사용_시퀀스.md",
