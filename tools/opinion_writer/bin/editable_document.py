@@ -35,13 +35,16 @@ def shape(p,identifier,x,y,width,height,z=1,fill=False):
     return s
 
 
-def make_full_docx(annex_docx,blank_pdf,placements,destination,fields=None):
+def make_full_docx(annex_docx,blank_pdf,placements,destination,fields=None,
+                   profile=None,masks=None,title=None,field_names=None,unconfirmed_title=None):
     from docx import Document
     from docx.oxml import OxmlElement
     from docx.oxml.ns import qn
     from pypdf import PdfReader
-    profile=json.loads((HERE/'서식/layout_profile.json').read_text())
-    if blank_pdf is None:return make_generic_full_docx(annex_docx,fields or {},destination)
+    profile=profile or json.loads((HERE/'서식/layout_profile.json').read_text())
+    if blank_pdf is None:
+        return make_generic_full_docx(annex_docx,fields or {},destination,
+                                      field_names=field_names,title=unconfirmed_title)
     doc=Document(annex_docx);body=doc.element.body
     annex_section=body.find(qn('w:sectPr'))
     reset=annex_section.find(qn('w:pgNumType'))
@@ -59,7 +62,9 @@ def make_full_docx(annex_docx,blank_pdf,placements,destination,fields=None):
             placement=placements[index] if index<len(placements) else None
             if placement:
                 if placement.get('standard',False):
-                    for j,(x,y,w,h) in enumerate([(398,604,137,19),(201,659,25,19)]):shape(p,f'Mask{index}_{j}',x,y,w,h,fill=True)
+                    page_masks = ([(398,604,137,19),(201,659,25,19)] if masks is None
+                                  else [item['box'] for item in masks if item['page']==index])
+                    for j,(x,y,w,h) in enumerate(page_masks):shape(p,f'Mask{index}_{j}',x,y,w,h,fill=True)
                 for j,entry in enumerate(placement['entries']):
                     size=entry['height'];x=entry['left'];y=entry['top']+profile.get('form_docx_top_adjust_pt',-.75)
                     s=shape(p,f'Field{index}_{j}',x,y,max(entry['width']+4,10),size+8,z=2)
@@ -81,11 +86,11 @@ def make_full_docx(annex_docx,blank_pdf,placements,destination,fields=None):
             typ.set(qn('w:val'),'nextPage');sp.append(section)
             elements.extend(list(holder))
         for element in reversed(elements):body.insert(0,element)
-        doc.core_properties.title='의견제출서 전체 편집본';doc.save(destination)
+        doc.core_properties.title=title or '의견제출서 전체 편집본';doc.save(destination)
     return Path(destination)
 
 
-def make_generic_full_docx(annex_docx,fields,destination):
+def make_generic_full_docx(annex_docx,fields,destination,field_names=None,title=None):
     from docx import Document
     from docx.shared import Pt
     from docx.enum.section import WD_SECTION_START
@@ -98,10 +103,10 @@ def make_generic_full_docx(annex_docx,fields,destination):
     for n in list(body):
         if n.tag!=qn('w:sectPr'):body.remove(n)
     sec=doc.sections[0];sec.top_margin=Pt(50);sec.bottom_margin=Pt(50);sec.left_margin=Pt(50);sec.right_margin=Pt(50)
-    p=doc.add_paragraph('의견제출서 초안 · 제출 서식 확인 필요')
+    p=doc.add_paragraph(title or '의견제출서 초안 · 제출 서식 확인 필요')
     p.paragraph_format.first_line_indent=Pt(0);p.paragraph_format.line_spacing=Pt(24)
     table=doc.add_table(rows=0,cols=2)
-    for key in FORM_KEYS:
+    for key in (field_names if field_names is not None else FORM_KEYS):
         cells=table.add_row().cells;cells[0].text=key.replace('_',' ');cells[1].text=str(fields.get(key,'【확인 필요】'))
         for cell in cells:
             for p in cell.paragraphs:

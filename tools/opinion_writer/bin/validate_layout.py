@@ -78,7 +78,7 @@ def expected_paragraphs(fields):
     return [compact(p) for value in values for p in re.split(r'\n\s*\n',str(value)) if compact(p)]
 
 
-def check_docx_contract(docx_path, fields, spec):
+def check_docx_contract(docx_path, fields, spec, profile=None):
     ns={'w':'http://schemas.openxmlformats.org/wordprocessingml/2006/main'}
     attr=lambda name:'{'+ns['w']+'}'+name
     errors=[]
@@ -86,7 +86,8 @@ def check_docx_contract(docx_path, fields, spec):
         root=ET.fromstring(source.read('word/document.xml'))
         font_table=ET.fromstring(source.read('word/fontTable.xml'))
     embedded={n.get(attr('name')) for n in font_table if n.find('w:embedRegular',ns) is not None}
-    families=set(json.loads((HERE/'서식/layout_profile.json').read_text())['fonts'].values())
+    profile = profile or json.loads((HERE/'서식/layout_profile.json').read_text())
+    families=set(profile['fonts'].values())
     if not families<=embedded:errors.append('DOCX에 기준 글꼴 임베딩이 없습니다.')
     table=root.find('.//w:tbl/w:tblGrid',ns)
     widths=[int(n.get(attr('w'))) for n in table] if table is not None else []
@@ -122,15 +123,16 @@ def check_docx_contract(docx_path, fields, spec):
     return errors
 
 
-def validate(docx_path,merged_pdf,cover_pages,fields,output_report,overlays=(),repeat=True,cover_pdf=None):
+def validate(docx_path,merged_pdf,cover_pages,fields,output_report,overlays=(),repeat=True,
+             cover_pdf=None,profile=None):
     import pdfplumber
     from pypdf import PdfReader
-    profile=json.loads((HERE/'서식/layout_profile.json').read_text())
+    profile=profile or json.loads((HERE/'서식/layout_profile.json').read_text())
     spec=profile['annex'];tolerance=spec['coordinate_tolerance_pt']
     result={'profile':profile['version'],'reference_sha256':profile['reference_sha256'],'docx_sha256':sha256(docx_path),'pdf_sha256':sha256(merged_pdf),
             'cover_pages':cover_pages,'errors':[],'warnings':[],'form':[],'meta':{},'page_comparison':[]}
     errors=result['errors']
-    errors.extend(check_docx_contract(docx_path,fields,spec))
+    errors.extend(check_docx_contract(docx_path,fields,spec,profile))
     for overlay,manifest in overlays:
         problems,positions=check_overlay(overlay,manifest);errors.extend(problems);result['form'].extend(positions)
     with tempfile.TemporaryDirectory(prefix='layout_check_',dir=temp_root()) as directory:

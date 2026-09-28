@@ -1,0 +1,573 @@
+{
+  "schema_version": 1,
+  "id": "opinion_notice_11",
+  "title": "행정절차법 시행규칙 별지 제11호 의견제출서",
+  "legal_basis": {
+    "law": "행정절차법 제27조제1항",
+    "rule": "행정절차법 시행규칙",
+    "form": "별지 제11호서식",
+    "source_url": "https://www.law.go.kr/LSW/flDownload.do?bylClsCd=110202&flSeq=116887859&gubun="
+  },
+  "verified_on": "2026-09-28",
+  "form_sha256": "2e021b4df5b475c5326437a6afc36498b4aa733725e318ad2ab146174f807a58",
+  "files": {
+    "form_pdf": "form/official_form.pdf",
+    "form_png": "form/official_form_background.png",
+    "annex_docx": "annex/narrative_template.docx"
+  },
+  "pages": [
+    {
+      "page": 0,
+      "fields": {
+        "의견제출인_성명": {
+          "box": [
+            148.32,
+            149.1,
+            385,
+            26
+          ],
+          "size": 9.96,
+          "min_size": 9,
+          "line": 16.02
+        },
+        "의견제출인_주소": {
+          "box": [
+            148.32,
+            197.3,
+            248,
+            26
+          ],
+          "size": 9.96,
+          "min_size": 8.5,
+          "line": 16.02
+        },
+        "의견제출인_전화번호": {
+          "box": [
+            430.8,
+            197.3,
+            103,
+            14
+          ],
+          "size": 9.96,
+          "min_size": 8.5,
+          "line": 12
+        },
+        "처분의_제목": {
+          "box": [
+            148.32,
+            249.1,
+            385,
+            36
+          ],
+          "size": 9.96,
+          "min_size": 9,
+          "line": 16.02
+        },
+        "당사자_명칭": {
+          "box": [
+            225.84,
+            307.3,
+            308,
+            27
+          ],
+          "size": 9,
+          "min_size": 8.5,
+          "line": 13
+        },
+        "당사자_주소": {
+          "box": [
+            225.84,
+            355.65,
+            308,
+            19
+          ],
+          "size": 9,
+          "min_size": 8.5,
+          "line": 10
+        },
+        "당사자_전화번호": {
+          "box": [
+            414,
+            377.1,
+            111,
+            10
+          ],
+          "size": 9,
+          "min_size": 8.5,
+          "line": 10
+        },
+        "의견": {
+          "box": [
+            200.64,
+            389.04,
+            336.96,
+            96.36
+          ],
+          "size": 9,
+          "min_size": 9,
+          "line": 14,
+          "align": "center",
+          "valign": "middle"
+        },
+        "기타": {
+          "box": [
+            200.64,
+            485.4,
+            336.96,
+            72.24
+          ],
+          "size": 9,
+          "min_size": 9,
+          "line": 14,
+          "align": "center",
+          "valign": "middle"
+        },
+        "작성일": {
+          "box": [
+            400,
+            608.6,
+            127,
+            14
+          ],
+          "size": 9,
+          "min_size": 9,
+          "line": 12,
+          "align": "right"
+        },
+        "의견제출인_서명": {
+          "box": [
+            310,
+            624,
+            144,
+            29
+          ],
+          "size": 9,
+          "min_size": 8.5,
+          "line": 13
+        },
+        "수신": {
+          "box": [
+            68.4,
+            662.4,
+            457,
+            17
+          ],
+          "size": 12,
+          "min_size": 9.5,
+          "line": 14
+        }
+      }
+    }
+  ],
+  "masks": [
+    {
+      "page": 0,
+      "box": [
+        398,
+        604,
+        137,
+        19
+      ],
+      "purpose": "date input placeholder"
+    },
+    {
+      "page": 0,
+      "box": [
+        201,
+        659,
+        25,
+        19
+      ],
+      "purpose": "recipient suffix input placeholder"
+    }
+  ],
+  "fields": {
+    "의견제출인_성명": {
+      "type": "text",
+      "required": true
+    },
+    "의견제출인_주소": {
+      "type": "text",
+      "required": true
+    },
+    "의견제출인_전화번호": {
+      "type": "text",
+      "required": true
+    },
+    "처분의_제목": {
+      "type": "text",
+      "required": true
+    },
+    "당사자_명칭": {
+      "type": "text",
+      "required": true
+    },
+    "당사자_주소": {
+      "type": "text",
+      "required": true
+    },
+    "당사자_전화번호": {
+      "type": "text",
+      "required": true
+    },
+    "의견": {
+      "type": "text",
+      "required": true
+    },
+    "기타": {
+      "type": "text",
+      "required": true
+    },
+    "작성일": {
+      "type": "text",
+      "required": true
+    },
+    "의견제출인_서명": {
+      "type": "text",
+      "required": true
+    },
+    "수신": {
+      "type": "text",
+      "required": true
+    },
+    "취지": {
+      "type": "paragraphs",
+      "required": true
+    },
+    "결어": {
+      "type": "paragraphs",
+      "required": true
+    },
+    "건명": {
+      "type": "paragraphs",
+      "required": true
+    },
+    "처분청": {
+      "type": "paragraphs",
+      "required": true
+    },
+    "의견제출인_명칭": {
+      "type": "paragraphs",
+      "required": true
+    },
+    "소명자료_목록": {
+      "type": "list",
+      "required": true
+    },
+    "소명": {
+      "type": "repeat",
+      "required": false,
+      "item_fields": [
+        "제목",
+        "본문"
+      ],
+      "legacy_prefix": "소명"
+    }
+  },
+  "normalization": {
+    "repeat": {
+      "field": "소명",
+      "legacy_prefix": "소명",
+      "item_fields": [
+        "제목",
+        "본문"
+      ]
+    },
+    "defaults": {
+      "별지_제목": "처분사전통지에 대한 상세 의견서",
+      "자료목록_제목": "소명자료 확보 및 제출 예정 목록"
+    },
+    "required": [
+      "의견제출인_성명",
+      "의견제출인_주소",
+      "의견제출인_전화번호",
+      "처분의_제목",
+      "당사자_명칭",
+      "당사자_주소",
+      "당사자_전화번호",
+      "의견",
+      "기타",
+      "작성일",
+      "의견제출인_서명",
+      "수신",
+      "취지",
+      "결어",
+      "건명",
+      "처분청",
+      "의견제출인_명칭",
+      "소명자료_목록"
+    ],
+    "derived": {
+      "대상_표시": {
+        "name": "parenthesized",
+        "source": "해당_품목"
+      },
+      "별지_주소": {
+        "name": "normalized_address",
+        "source": "의견제출인_주소"
+      },
+      "별지_작성일": {
+        "name": "dot_date",
+        "source": "작성일"
+      },
+      "별지_서명": {
+        "name": "opinion_signature",
+        "sources": [
+          "의견제출인_서명",
+          "의견제출인_명칭",
+          "대표자"
+        ]
+      }
+    }
+  },
+  "transforms": {
+    "당사자_주소": {
+      "name": "normalized_address"
+    },
+    "의견제출인_서명": {
+      "name": "representative_signature",
+      "representative": "대표자",
+      "company": "의견제출인_명칭"
+    },
+    "작성일": {
+      "name": "korean_date"
+    }
+  },
+  "suffixes": {
+    "수신": "   귀하"
+  },
+  "representative_box": {
+    "field": "의견제출인_서명",
+    "box": [
+      373.8,
+      629.64,
+      85.8,
+      12
+    ],
+    "size": 9,
+    "min_size": 9,
+    "line": 12
+  },
+  "annexes": [
+    {
+      "type": "narrative",
+      "template": "annex/narrative_template.docx",
+      "repeat": {
+        "field": "소명",
+        "title_placeholder": "소명_제목",
+        "body_placeholder": "소명_본문"
+      },
+      "paragraph_fields": [
+        "취지",
+        "결어"
+      ],
+      "list_fields": [
+        "소명자료_목록"
+      ],
+      "keep_last_list_items": 2
+    }
+  ],
+  "output": {
+    "pdf_prefix": "의견제출서_",
+    "annex_docx_prefix": "별지_상세의견서_",
+    "full_docx_prefix": "의견제출서_전체편집본_",
+    "fallback_name_field": "의견제출인_명칭",
+    "verification_prefix": "검증",
+    "overlay_title": "의견제출서 입력값 레이어",
+    "full_docx_title": "의견제출서 전체 편집본",
+    "unconfirmed_title": "의견제출서 초안 · 제출 서식 확인 필요"
+  },
+  "form_mode": "standard11",
+  "validation": {
+    "type": "opinion_precise"
+  },
+  "profile": {
+    "version": "portable-nanum-v1",
+    "reference": "행정절차법 시행규칙 별지 제11호 공식 서식",
+    "page_pt": [
+      595,
+      842
+    ],
+    "fonts": {
+      "body": "NanumMyeongjo",
+      "form": "NanumGothic"
+    },
+    "annex": {
+      "left_pt": 70.92,
+      "right_pt": 70.48,
+      "top_pt": 67.48,
+      "bottom_pt": 70.92,
+      "body_size_pt": 12,
+      "body_tracking_pt": 1.2,
+      "line_pt": 30,
+      "first_indent_pt": 66,
+      "label_width_pt": 66,
+      "label_gap_pt": 30,
+      "label_x_pt": 70.92,
+      "value_x_pt": 166.92,
+      "title_size_pt": 20,
+      "title_before_pt": 28.8,
+      "title_line_pt": 40,
+      "title_after_pt": 41.2,
+      "meta_line_pt": 30,
+      "case_before_pt": 30,
+      "intent_before_pt": 86.5,
+      "heading_size_pt": 15,
+      "heading_line_pt": 37.5,
+      "heading_after_pt": 33.5,
+      "section_before_pt": 45,
+      "coordinate_tolerance_pt": 1.2,
+      "address_scale_percent": 95,
+      "target_scale_percent": 90,
+      "target_tracking_pt": -0.02,
+      "tag_visible_top_pt": 81.9,
+      "title_visible_top_pt": 142.3,
+      "meta_visible_top_pt": 221.9
+    },
+    "form": {
+      "의견제출인_성명": {
+        "box": [
+          148.32,
+          149.1,
+          385,
+          26
+        ],
+        "size": 9.96,
+        "min_size": 9,
+        "line": 16.02
+      },
+      "의견제출인_주소": {
+        "box": [
+          148.32,
+          197.3,
+          248,
+          26
+        ],
+        "size": 9.96,
+        "min_size": 8.5,
+        "line": 16.02
+      },
+      "의견제출인_전화번호": {
+        "box": [
+          430.8,
+          197.3,
+          103,
+          14
+        ],
+        "size": 9.96,
+        "min_size": 8.5,
+        "line": 12
+      },
+      "처분의_제목": {
+        "box": [
+          148.32,
+          249.1,
+          385,
+          36
+        ],
+        "size": 9.96,
+        "min_size": 9,
+        "line": 16.02
+      },
+      "당사자_명칭": {
+        "box": [
+          225.84,
+          307.3,
+          308,
+          27
+        ],
+        "size": 9,
+        "min_size": 8.5,
+        "line": 13
+      },
+      "당사자_주소": {
+        "box": [
+          225.84,
+          355.65,
+          308,
+          19
+        ],
+        "size": 9,
+        "min_size": 8.5,
+        "line": 10
+      },
+      "당사자_전화번호": {
+        "box": [
+          414,
+          377.1,
+          111,
+          10
+        ],
+        "size": 9,
+        "min_size": 8.5,
+        "line": 10
+      },
+      "의견": {
+        "box": [
+          200.64,
+          389.04,
+          336.96,
+          96.36
+        ],
+        "size": 9,
+        "min_size": 9,
+        "line": 14,
+        "align": "center",
+        "valign": "middle"
+      },
+      "기타": {
+        "box": [
+          200.64,
+          485.4,
+          336.96,
+          72.24
+        ],
+        "size": 9,
+        "min_size": 9,
+        "line": 14,
+        "align": "center",
+        "valign": "middle"
+      },
+      "작성일": {
+        "box": [
+          400,
+          608.6,
+          127,
+          14
+        ],
+        "size": 9,
+        "min_size": 9,
+        "line": 12,
+        "align": "right"
+      },
+      "의견제출인_서명": {
+        "box": [
+          310,
+          624,
+          144,
+          29
+        ],
+        "size": 9,
+        "min_size": 8.5,
+        "line": 13
+      },
+      "수신": {
+        "box": [
+          68.4,
+          662.4,
+          457,
+          17
+        ],
+        "size": 12,
+        "min_size": 9.5,
+        "line": 14
+      }
+    },
+    "reference_sha256": "2e021b4df5b475c5326437a6afc36498b4aa733725e318ad2ab146174f807a58",
+    "official_form_sha256": "2e021b4df5b475c5326437a6afc36498b4aa733725e318ad2ab146174f807a58",
+    "font_files": {
+      "body": "assets/fonts/NanumMyeongjo-Regular.ttf",
+      "form": "assets/fonts/NanumGothic-Regular.ttf"
+    }
+  }
+}
