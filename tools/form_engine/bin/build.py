@@ -24,7 +24,8 @@ def main(argv=None):
     parser.add_argument("--keys", action="store_true")
     parser.add_argument("--no-open", action="store_true")
     parser.add_argument("--raster", action="store_true")
-    parser.add_argument("--output-root", type=Path, default=TOOLS / "form_engine/산출")
+    parser.add_argument("--output-root", type=Path,
+                        help="산출물 루트. 기본값은 입력 fields.json 옆의 산출 폴더")
     parser.add_argument("--out-dir", type=Path)
     args = parser.parse_args(argv)
     if args.list_packs:
@@ -42,7 +43,12 @@ def main(argv=None):
         parser.error("fields.json 경로가 필요합니다.")
     bootstrap()
     fields = json.loads(args.fields.read_text(encoding="utf-8"))
-    build(fields, pack, args.output_root, args.out_dir, args.no_open, args.raster)
+    input_parent = args.fields.resolve().parent
+    in_public_pack = input_parent == PACKS_ROOT.resolve() or PACKS_ROOT.resolve() in input_parent.parents
+    output_root = args.output_root or (
+        TOOLS / "form_engine/산출" if in_public_pack else input_parent / "산출"
+    )
+    build(fields, pack, output_root, args.out_dir, args.no_open, args.raster)
 
 
 if __name__ == "__main__":
