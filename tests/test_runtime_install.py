@@ -139,7 +139,7 @@ def main() -> int:
                     assert copied.read_bytes() == original.read_bytes(), copied
 
         assert (target / "AGENTS.md").read_bytes() == (target / "CLAUDE.md").read_bytes()
-        assert (target / "AGENTS.md").stat().st_size <= 30_000
+        assert (target / "AGENTS.md").stat().st_size <= 12_000
         assert not list(target.rglob("__pycache__"))
         assert not list(target.rglob("*.pyc"))
 
@@ -168,8 +168,10 @@ def main() -> int:
             assert trigger in constitution
         for source in ("1_자료실/", "2_서류철/", "3_작업실/"):
             assert source in constitution
-        assert "이미 반영된 자료이므로 건너뛴다" in constitution
-        assert "2_서류철/#sha256:" in constitution
+        ingest_rules = (target / "운영규칙/자료환류.md").read_text(encoding="utf-8")
+        assert "이미 반영된 자료이므로 건너뛴다" in ingest_rules
+        assert "2_서류철/#sha256:" in ingest_rules
+        check_constitution_layers(target)
 
         ignored = subprocess.run(
             ["git", "-C", str(ROOT), "-c", "core.quotePath=false", "check-ignore", "--no-index", "--stdin"],
@@ -226,6 +228,50 @@ def main() -> int:
 
     print("✅ clean runtime install test passed")
     return 0
+
+
+
+def check_constitution_layers(target: Path) -> None:
+    """실제 설치본의 안전 전문과 작업 색인이 빠짐없이 배포되는지 검사한다."""
+    import hashlib
+
+    constitution = (target / "AGENTS.md").read_text(encoding="utf-8")
+    safety = constitution.split("# 안전 규칙 3종", 1)[1].split("## 폴더와 범위", 1)[0]
+    safety = "# 안전 규칙 3종" + safety.rstrip() + "\n"
+    # main 2338de0의 안전 1~3 전문. 축약·하부 이동·우발 수정은 실패한다.
+    assert hashlib.sha256(safety.encode("utf-8")).hexdigest() == (
+        "4a3caff2857722758bb0805a535a600f06fd44c48815ae11279dabfbb6a2ff10"
+    )
+    for title in (
+        "## 안전 1. 개인정보 게이트 — 저장 직전에 눈으로 다시 훑는다",
+        "## 안전 2. 2_서류철 격리 규칙",
+        "## 안전 3. 자동으로 하는 것과 물어보는 것",
+    ):
+        assert title in constitution, title
+    index = constitution.split("## 작업 전에 반드시 읽는 색인", 1)[1].split("## 질문하기", 1)[0]
+    index_paths = re.findall(r"`([^`]+\.md)`", index)
+    expected = {
+        "운영규칙/자료환류.md", "운영규칙/건강검진.md", "운영규칙/현황판.md",
+        "운영규칙/위키작성.md", "운영규칙/상담수임.md", "운영규칙/기억운영.md",
+        "tools/opinion_writer/AGENTS.md", "tools/opinion_writer/사용_시퀀스.md",
+        ".agents/skills/form-template-filler/SKILL.md",
+    }
+    assert set(index_paths) == expected
+    for relative in index_paths:
+        assert (target / relative).is_file(), relative
+    detail_files = sorted((target / "운영규칙").glob("*.md"))
+    assert {"운영규칙/" + p.name for p in detail_files} == {p for p in expected if p.startswith("운영규칙/")}
+    for path in detail_files:
+        text = path.read_text(encoding="utf-8")
+        assert text.splitlines()[0] == "상위 AGENTS.md 색인에서 호출됨 · 안전 규칙은 상위가 우선", path
+        assert "## 안전 1." not in text, path
+        for dependency in re.findall(r"`(운영규칙/[^`]+\.md)`", text):
+            assert (target / dependency).is_file(), (path, dependency)
+
+
+def test_clean_runtime_install() -> None:
+    # 원래 main() 전용이던 설치 검사를 pytest에서도 실제로 실행한다.
+    assert main() == 0
 
 
 if __name__ == "__main__":

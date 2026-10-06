@@ -4,6 +4,7 @@
   "copy": [
     {"source": "AGENTS.md", "target": "AGENTS.md"},
     {"source": "CLAUDE.md", "target": "CLAUDE.md"},
+    {"source": "운영규칙", "target": "운영규칙"},
     {"source": "사용안내.md", "target": "README.md"},
     {"source": "dashboard.html", "target": "dashboard.html"},
     {"source": ".gitignore", "target": ".gitignore"},
@@ -23,8 +24,14 @@
     {"source": "c_도구/graphify_설정.md", "target": "tools/안내_지식그래프.md"},
     {"source": ".agents/skills/form-template-filler/references/implementation-guide.md", "target": "tools/안내_반복서식.md"}
   ],
-  "required_directories": ["1_자료실", "2_서류철", "3_작업실", "memory", "tools", "wiki", ".agents/skills/form-template-filler", "tools/opinion_writer", "tools/form_engine", "tools/form_packs/opinion_notice_11"],
+  "required_directories": ["1_자료실", "2_서류철", "3_작업실", "memory", "tools", "wiki", ".agents/skills/form-template-filler", "tools/opinion_writer", "tools/form_engine", "tools/form_packs/opinion_notice_11", "운영규칙"],
   "required_files": [
+    "운영규칙/자료환류.md",
+    "운영규칙/건강검진.md",
+    "운영규칙/현황판.md",
+    "운영규칙/위키작성.md",
+    "운영규칙/상담수임.md",
+    "운영규칙/기억운영.md",
     "AGENTS.md",
     "CLAUDE.md",
     "README.md",
