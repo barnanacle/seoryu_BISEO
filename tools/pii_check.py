@@ -15,8 +15,7 @@ AI의 자기점검(헌법 「안전 1」)이 조용히 건너뛰어질 때를 �
     2. 읽는 곳은 `wiki/` 와 `memory/` 의 텍스트 파일뿐입니다.
     3. 절대 열지 않는 곳: `2_서류철/`(의뢰인 실명 자료) · `3_작업실/` · `1_자료실/`.
        — 2_서류철은 실명을 적어도 되는 유일한 곳이라 점검 대상이 아닙니다.
-    4. 인터넷에 접속하지 않습니다. 판정 규칙은 `make_dashboard.py` 의 것을 그대로 씁니다
-       (규칙이 한 곳에만 있어야 두 프로그램의 결과가 어긋나지 않습니다).
+    4. 인터넷에 접속하지 않습니다. 독립된 `pii_rules.py`의 판정 규칙을 사용합니다.
 
 ⚠️ 걸리는 것이 없다고 해서 "안전하다"는 뜻은 아닙니다. 규칙에 없는 형태는 지나갑니다.
    마지막 방어선은 언제나 사람이 한 번 눈으로 보는 것입니다.
@@ -30,9 +29,9 @@ import sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 try:
-    from make_dashboard import Masker, nfc, read_text, say
-except ImportError:  # 같은 폴더에 make_dashboard.py 가 없을 때
-    print("❌ 같은 tools 폴더 안의 make_dashboard.py 를 찾지 못했습니다.")
+    from pii_rules import Masker, nfc, read_text, say
+except ImportError:  # 같은 폴더에 pii_rules.py 가 없을 때
+    print("❌ 같은 tools 폴더 안의 pii_rules.py 를 찾지 못했습니다.")
     print("   두 파일은 함께 있어야 합니다(판정 규칙을 나눠 쓰기 때문입니다).")
     print("   AI에게 「JARVIS 운영 꾸러미의 tools를 점검하고 빠진 파일을 복구해줘」라고 말씀하세요.")
     sys.exit(1)

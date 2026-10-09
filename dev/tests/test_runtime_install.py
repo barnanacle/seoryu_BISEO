@@ -9,6 +9,8 @@ import re
 import subprocess
 import sys
 import tempfile
+import contextlib
+import io
 from pathlib import Path
 from urllib.parse import unquote
 
@@ -48,7 +50,7 @@ BANNED_INSTALL_PHRASES = (
 
 
 def check_source_tools(target: Path) -> None:
-    """새 경로의 미처리 집계·처리 대장 대조·개인 자료 제외를 확인한다."""
+    """개인정보 점검의 입력 폴더 제외와 읽기 전용 실행을 확인한다."""
     for rel in (
         "1_자료실/행정절차·공통/guide.pdf",
         "1_자료실/행정절차·공통/pending.pdf",
@@ -61,30 +63,6 @@ def check_source_tools(target: Path) -> None:
 
     ledger = "1_자료실/행정절차·공통/guide.pdf\t새페이지\tguide\t2026-09-04\n"
     (target / "wiki/.ingest-ledger.tsv").write_text(ledger, encoding="utf-8")
-    for path in (target / "tools/make_dashboard.py", ROOT / "docs/보관/이전_챗지피티/templates/tools_make_dashboard.py"):
-        spec = importlib.util.spec_from_file_location("dashboard_path_test", path)
-        module = importlib.util.module_from_spec(spec)
-        spec.loader.exec_module(module)
-        paths, _, _ = module.parse_ledger(ledger.replace("/", "\\"))
-        assert "1_자료실/행정절차·공통/guide.pdf" in paths
-        assert "행정절차·공통/guide.pdf" in paths
-
-        original_read = module.read_text
-
-        def guarded_read(filename):
-            relative = Path(filename).relative_to(target)
-            assert relative.parts[0] not in SOURCE_DIRS, relative
-            return original_read(filename)
-
-        module.read_text = guarded_read
-        payload = module.build_data(str(target), lambda text: text)
-        assert payload["요약"]["미처리"] == 1, payload["요약"]
-        assert "미처리" not in payload["지표없음"]
-        template = (target / "tools/dashboard_template.html").read_text(encoding="utf-8")
-        rendered = module.inject(template, payload)
-        assert "const DATA = /*__DATA__*/ {" in rendered
-        assert "private.md" not in rendered and "draft.md" not in rendered
-
     # 입력 폴더 이름이 wiki 하위에 생겨도 개인정보 점검은 건너뛴다.
     for folder in SOURCE_DIRS:
         nested = target / "wiki" / folder
@@ -97,6 +75,22 @@ def check_source_tools(target: Path) -> None:
         for filename in module.iter_files(str(target)):
             relative = Path(filename).relative_to(target)
             assert not set(relative.parts) & set(SOURCE_DIRS), relative
+        original_read = module.read_text
+        def guarded_read(filename):
+            relative = Path(filename).relative_to(target)
+            assert not set(relative.parts) & set(SOURCE_DIRS), relative
+            return original_read(filename)
+        module.read_text = guarded_read
+        sample = target / "wiki/synthetic_pii_fixture.md"
+        sample.write_text("합성 테스트 연락처: 010-1234-5678", encoding="utf-8")
+        before = {p: p.stat().st_mtime_ns for p in target.rglob("*") if p.is_file()}
+        captured = io.StringIO()
+        with contextlib.redirect_stdout(captured):
+            assert module.main([str(path), str(target)]) == 0
+        assert "010-1234-5678" not in captured.getvalue()
+        assert "010-****-****" in captured.getvalue()
+        after = {p: p.stat().st_mtime_ns for p in target.rglob("*") if p.is_file()}
+        assert before == after, "PII check must be read-only"
 
 
 def main() -> int:
@@ -107,6 +101,12 @@ def main() -> int:
     assert (ROOT / "dev/README.md").is_file()
     for item in MANIFEST["copy"]:
         assert not item["source"].startswith(("docs/", "dev/", "c_도구/")), item
+    for retired in ("dashboard.html", "tools/make_dashboard.py", "tools/dashboard_template.html",
+                    "docs/보관/이전_챗지피티/대시보드_사용법.md",
+                    "docs/보관/이전_챗지피티/templates/dashboard.html",
+                    "docs/보관/이전_챗지피티/templates/tools_make_dashboard.py"):
+        assert not (ROOT / retired).exists(), retired
+    assert "현황판 그리기" not in (ROOT / "AGENTS.md").read_text(encoding="utf-8")
     # Moving guides must not break their links to the one current installer.
     for doc in [*INSTALL_FACING_DOCS, ROOT / "docs/README.md", ROOT / "dev/README.md"]:
         for link in re.findall(r"!?\[[^\]\n]*\]\(([^\s)]+)\)", doc.read_text(encoding="utf-8")):

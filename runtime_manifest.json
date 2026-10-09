@@ -5,7 +5,6 @@
     {"source": "AGENTS.md", "target": "AGENTS.md"},
     {"source": "CLAUDE.md", "target": "CLAUDE.md"},
     {"source": "사용안내.md", "target": "README.md"},
-    {"source": "dashboard.html", "target": "dashboard.html"},
     {"source": ".gitignore", "target": ".gitignore"},
     {"source": "1_자료실", "target": "1_자료실"},
     {"source": "memory", "target": "memory"},
@@ -23,6 +22,8 @@
     "README.md",
     "tools/convert2md.py",
     "tools/hwp2md.py",
+    "tools/pii_check.py",
+    "tools/pii_rules.py",
     "wiki/index.md",
     "memory/MEMORY.md",
     "tools/안내_반복서식.md",
@@ -48,6 +49,6 @@
     "tools/opinion_writer/assets/fonts/OFL-NanumMyeongjo.txt",
     "tools/opinion_writer/assets/fonts/OFL-NanumGothic.txt"
   ],
-  "must_not_install": ["docs", "dev", "tests", "a_설치", "b_시작", "c_도구", "d_사용법", "e_확장", "f_챗지피티"],
+  "must_not_install": ["dashboard.html", "tools/make_dashboard.py", "tools/dashboard_template.html", "docs", "dev", "tests", "a_설치", "b_시작", "c_도구", "d_사용법", "e_확장", "f_챗지피티"],
   "never_copy_from_source": [".git", "docs", "dev", "tools/opinion_writer/산출", "tools/opinion_writer/.venv", "tools/form_engine/산출"]
 }

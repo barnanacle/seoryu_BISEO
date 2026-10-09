@@ -24,6 +24,10 @@ __pycache__/
 _쓰기점검.txt
 Thumbs.db
 
+# 이전 설치에서 남은 비공개 현황 HTML은 게시·백업하지 않는다.
+/dashboard.html
+/tools/dashboard_template.html
+
 # Opinion writer cases, generated documents, and local dependencies
 tools/opinion_writer/산출/
 tools/opinion_writer/.venv/
