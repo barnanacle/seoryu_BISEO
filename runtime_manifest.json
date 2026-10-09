@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "description": "수강생 PC에 설치하는 서류비서 운영 구성. 저장소의 a_~f_ 설명서 폴더와 .git은 설치하지 않는다.",
+  "description": "수강생 PC에 설치하는 서류비서 운영 구성. docs(안내·보관)와 dev(개발 테스트), .git은 설치하지 않는다.",
   "copy": [
     {"source": "AGENTS.md", "target": "AGENTS.md"},
     {"source": "CLAUDE.md", "target": "CLAUDE.md"},
@@ -14,13 +14,6 @@
     {"source": "2_서류철", "target": "2_서류철"},
     {"source": "3_작업실", "target": "3_작업실"},
     {"source": ".agents/skills/form-template-filler", "target": ".agents/skills/form-template-filler"},
-    {"source": "c_도구/convert2md.py", "target": "tools/convert2md.py"},
-    {"source": "c_도구/hwp2md.py", "target": "tools/hwp2md.py"},
-    {"source": "c_도구/graph_normalize.py", "target": "tools/graph_normalize.py"},
-    {"source": "c_도구/graph_report_inferred.py", "target": "tools/graph_report_inferred.py"},
-    {"source": "c_도구/도구_사용법.md", "target": "tools/안내_파일변환.md"},
-    {"source": "c_도구/법령검색_MCP_설정.md", "target": "tools/안내_법령검색.md"},
-    {"source": "c_도구/graphify_설정.md", "target": "tools/안내_지식그래프.md"},
     {"source": ".agents/skills/form-template-filler/references/implementation-guide.md", "target": "tools/안내_반복서식.md"}
   ],
   "required_directories": ["1_자료실", "2_서류철", "3_작업실", "memory", "tools", "wiki", ".agents/skills/form-template-filler", "tools/opinion_writer", "tools/form_engine", "tools/form_packs/opinion_notice_11"],
@@ -55,6 +48,6 @@
     "tools/opinion_writer/assets/fonts/OFL-NanumMyeongjo.txt",
     "tools/opinion_writer/assets/fonts/OFL-NanumGothic.txt"
   ],
-  "must_not_install": ["a_설치", "b_시작", "c_도구", "d_사용법", "e_확장", "f_챗지피티"],
-  "never_copy_from_source": [".git", "tools/opinion_writer/산출", "tools/opinion_writer/.venv", "tools/form_engine/산출"]
+  "must_not_install": ["docs", "dev", "tests", "a_설치", "b_시작", "c_도구", "d_사용법", "e_확장", "f_챗지피티"],
+  "never_copy_from_source": [".git", "docs", "dev", "tools/opinion_writer/산출", "tools/opinion_writer/.venv", "tools/form_engine/산출"]
 }
